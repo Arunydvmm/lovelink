@@ -1,0 +1,149 @@
+services:
+  # Backend + Frontend (Full-stack app)
+  - type: web
+    name: lovelink
+    runtime: node
+    env: node
+    region: oregon  # Change to your preferred region (oregon, frankfurt, singapore)
+    plan: starter  # Free tier
+    
+    # Build configuration
+    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    startCommand: npm start
+    
+    # Root directory
+    rootDir: .
+    
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      - key: DATABASE_URL
+        sync: false  # Set in Render dashboard
+      
+      - key: JWT_SECRET
+        sync: false  # Set in Render dashboard (generate random string)
+      
+      - key: JWT_REFRESH_SECRET
+        sync: false  # Set in Render dashboard (generate different random string)
+      
+      - key: JWT_EXPIRE
+        value: 15m
+      
+      - key: JWT_REFRESH_EXPIRE
+        value: 7d
+      
+      - key: SESSION_SECRET
+        sync: false  # Set in Render dashboard
+      
+      - key: GOOGLE_CLIENT_ID
+        sync: false  # Set in Render dashboard
+      
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false  # Set in Render dashboard
+      
+      - key: RAZORPAY_KEY_ID
+        sync: false  # Set in Render dashboard
+      
+      - key: RAZORPAY_KEY_SECRET
+        sync: false  # Set in Render dashboard
+      
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false  # Set in Render dashboard
+      
+      - key: SMTP_HOST
+        value: relay.dnsexit.com
+      
+      - key: SMTP_BACKUP_HOST
+        value: relaybackup.dnsexit.com
+      
+      - key: SMTP_PORT
+        value: 587
+      
+      - key: SMTP_SECURE
+        value: false
+      
+      - key: SMTP_USER
+        sync: false  # Set in Render dashboard
+      
+      - key: SMTP_PASSWORD
+        sync: false  # Set in Render dashboard
+      
+      - key: EMAIL_FROM
+        sync: false  # Set in Render dashboard (e.g., noreply@yourdomain.com)
+      
+      - key: EMAIL_FROM_NAME
+        value: LoveLink
+      
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false  # Set in Render dashboard
+      
+      - key: CLOUDINARY_API_KEY
+        sync: false  # Set in Render dashboard
+      
+      - key: CLOUDINARY_API_SECRET
+        sync: false  # Set in Render dashboard
+      
+      - key: CLOUDINARY_UPLOAD_PRESET
+        sync: false  # Set in Render dashboard (optional)
+      
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: lovelink
+          property: url
+      
+      - key: VITE_APP_URL
+        fromService:
+          type: web
+          name: lovelink
+          property: url
+      
+      - key: VITE_APP_NAME
+        value: LoveLink
+      
+      - key: LOG_LEVEL
+        value: info
+      
+      - key: LOG_FILE
+        value: logs/app.log
+      
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 1000
+      
+      - key: RATE_LIMIT_LOGIN_MAX
+        value: 10
+      
+      - key: RATE_LIMIT_LOGIN_WINDOW
+        value: 900000
+      
+      - key: FEATURE_EMAIL_NOTIFICATIONS
+        value: true
+      
+      - key: FEATURE_TWO_FACTOR_AUTH
+        value: false
+      
+      - key: FEATURE_ANALYTICS
+        value: true
+      
+      - key: ALLOWED_ORIGINS
+        fromService:
+          type: web
+          name: lovelink
+          property: url
+
+# Database (PostgreSQL)
+databases:
+  - name: lovelink-db
+    databaseName: lovelink_prod
+    plan: starter  # Free tier (90 days, then paid)
+    region: oregon  # Same region as web service
+    ipAllowList: []  # Empty = allow all (or restrict to Render IPs)
+
