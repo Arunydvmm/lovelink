@@ -39,7 +39,7 @@
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.0",
     "helmet": "^7.1.0",
-    "jsonwebtoken": "^9.1.2",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "nodemailer": "^6.9.13",
