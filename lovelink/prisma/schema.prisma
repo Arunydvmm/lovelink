@@ -1,0 +1,523 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id                    String     @id @default(cuid())
+  email                 String     @unique
+  name                  String?
+  profileImage          String?
+  role                  UserRole   @default(USER)
+  googleId              String     @unique // Required for Google OAuth
+  lastLoginAt           DateTime?
+  isActive              Boolean    @default(true)
+
+  // Relations
+  stories               Story[]
+  orders                Order[]
+  payments              Payment[]
+  sessions              Session[]
+  auditLogs             AuditLog[]
+  notifications         Notification[]
+  draftStories          DraftStory[]
+  emailLogs             EmailLog[]
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([email])
+  @@index([role])
+  @@index([googleId])
+  @@index([createdAt])
+}
+
+model Session {
+  id                    String     @id @default(cuid())
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token                 String     @unique
+  userAgent             String?
+  ipAddress             String?
+  expiresAt             DateTime
+  revokedAt             DateTime?
+
+  createdAt             DateTime   @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ============================================
+// EMAIL LOGGING
+// ============================================
+
+model EmailLog {
+  id                    String     @id @default(cuid())
+  userId                String?
+  user                  User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  orderId               String?
+  order                 Order?     @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  storyId               String?
+  story                 Story?     @relation(fields: [storyId], references: [id], onDelete: SetNull)
+  templateId            String?
+  template              Template?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  recipientEmail        String
+  senderEmail           String
+  subject               String
+  emailType             EmailType
+  status                EmailStatus @default(PENDING)
+  provider              String     @default("DNSExit")
+  providerMessageId     String?
+  smtpHost              String?
+  smtpPort              Int?
+  errorMessage          String?
+  retryCount            Int        @default(0)
+  sentAt                DateTime?
+  failedAt              DateTime?
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([orderId])
+  @@index([recipientEmail])
+  @@index([status])
+  @@index([emailType])
+  @@index([createdAt])
+}
+
+enum EmailType {
+  PURCHASE_CONFIRMATION
+  PAYMENT_RECEIPT
+  SYSTEM_NOTIFICATION
+  CUSTOM
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  RETRY_SCHEDULED
+}
+
+// ============================================
+// TEMPLATES & STORIES
+// ============================================
+
+model Template {
+  id                    String     @id @default(cuid())
+  name                  String
+  slug                  String     @unique
+  category              String
+  description           String?
+  coverImage            String
+  previewImages         String[]
+  previewVideo          String?
+  price                 Int        @default(0)  // in paise
+  salePrice             Int?
+  estimatedTime         String?
+  isFeatured            Boolean    @default(false)
+  isTrending            Boolean    @default(false)
+  isPremium             Boolean    @default(false)
+  status                TemplateStatus @default(DRAFT)
+  version               Int        @default(1)
+
+  // JSON structure
+  theme                 Json
+  music                 Json?
+  sections              Json[]
+  fields                Json[]
+  defaultContent        Json?
+  seo                   Json?
+
+  // Relations
+  stories               Story[]
+  orders                Order[]
+  emailLogs             EmailLog[]
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  deletedAt             DateTime?
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum TemplateStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Story {
+  id                    String     @id @default(cuid())
+  slug                  String     @unique
+  templateId            String
+  template              Template   @relation(fields: [templateId], references: [id])
+  templateSnapshot      Json       // Full template snapshot at creation time
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userEmail             String     // For backward compatibility
+  senderName            String
+  recipientName         String
+  storyData             Json
+  customMusicUrl        String?
+  customMusicTitle      String?
+  isPaid                Boolean    @default(false)
+  isPublished           Boolean    @default(false)
+  views                 Int        @default(0)
+  uniqueVisits          Int        @default(0)
+  viewedBy              String[]   // array of IP/user identifiers
+  orderId               String?
+  order                 Order?     @relation(fields: [orderId], references: [id])
+
+  // Relations
+  emailLogs             EmailLog[]
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  deletedAt             DateTime?
+
+  @@index([userId])
+  @@index([slug])
+  @@index([templateId])
+  @@index([isPublished])
+  @@index([createdAt])
+}
+
+model DraftStory {
+  id                    String     @id @default(cuid())
+  templateId            String
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storyData             Json
+  step                  Int        @default(1)
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@unique([templateId, userId])
+  @@index([userId])
+}
+
+// ============================================
+// PAYMENTS & ORDERS
+// ============================================
+
+model Order {
+  id                    String     @id @default(cuid())
+  orderId               String     @unique // Razorpay order ID
+  storyId               String?
+  story                 Story?     @relation(fields: [storyId], references: [id])
+  templateId            String
+  template              Template   @relation(fields: [templateId], references: [id])
+  templateName          String
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userEmail             String
+  amount                Int        @default(0)  // in paise
+  discount              Int        @default(0)
+  tax                   Int        @default(0)
+  totalAmount           Int        @default(0)
+  paymentMethod         PaymentMethod
+  paymentStatus         PaymentStatus @default(PENDING)
+  transactionId         String?
+  utrNumber             String?
+  couponCode            String?
+  coupon                Coupon?    @relation(fields: [couponCode], references: [code])
+  notes                 Json?
+  razorpayOrderId       String?    @unique
+  razorpayPaymentId     String?    @unique
+  razorpaySignature     String?
+
+  // Relations
+  payments              Payment[]
+  invoices              Invoice[]
+  emailLogs             EmailLog[]
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@index([razorpayOrderId])
+}
+
+enum PaymentMethod {
+  UPI
+  CARD
+  WALLET
+  NETBANKING
+  RAZORPAY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+model Payment {
+  id                    String     @id @default(cuid())
+  orderId               String
+  order                 Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount                Int        @default(0)  // in paise
+  currency              String     @default("INR")
+  status                PaymentStatus
+  method                PaymentMethod
+  razorpayPaymentId     String?    @unique
+  razorpayOrderId       String?
+  razorpaySignature     String?
+  transactionId         String?
+  failureReason         String?
+  metadata              Json?
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([orderId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Invoice {
+  id                    String     @id @default(cuid())
+  orderId               String
+  order                 Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  invoiceNumber         String     @unique
+  invoiceUrl            String?
+  pdfUrl                String?
+  amount                Int
+  tax                   Int
+  total                 Int
+  status                InvoiceStatus @default(PENDING)
+  sentAt                DateTime?
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([orderId])
+  @@index([status])
+}
+
+enum InvoiceStatus {
+  PENDING
+  SENT
+  PAID
+  OVERDUE
+}
+
+// ============================================
+// COUPONS & OFFERS
+// ============================================
+
+model Coupon {
+  code                  String     @id
+  discountType          DiscountType
+  discountValue         Int        // percentage or amount in paise
+  expiryDate            DateTime?
+  maxUses               Int?
+  usedCount             Int        @default(0)
+  minPurchaseAmount     Int?       // in paise
+  isActive              Boolean    @default(true)
+  applicableTemplates   String[]   // template IDs or "ALL"
+  metadata              Json?
+
+  // Relations
+  orders                Order[]
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([isActive])
+  @@index([expiryDate])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+// ============================================
+// CMS & LEGAL
+// ============================================
+
+model LegalPage {
+  slug                  String     @id
+  title                 String
+  content               String
+  htmlContent           String?
+  seo                   Json?
+  version               Int        @default(1)
+  isPublished           Boolean    @default(true)
+  publishedAt           DateTime?
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  deletedAt             DateTime?
+
+  @@index([isPublished])
+}
+
+model Announcement {
+  id                    String     @id @default(cuid())
+  text                  String
+  linkText              String?
+  linkUrl               String?
+  badge                 String?
+  bgColor               String?
+  isActive              Boolean    @default(true)
+  scheduledFor          DateTime?
+  expiresAt             DateTime?
+  priority              Int        @default(0)
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([isActive])
+  @@index([scheduledFor])
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id                    String     @id @default(cuid())
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                  NotificationType
+  title                 String
+  message               String
+  data                  Json?
+  read                  Boolean    @default(false)
+  readAt                DateTime?
+  actionUrl             String?
+  emailSent             Boolean    @default(false)
+
+  createdAt             DateTime   @default(now())
+
+  @@index([userId])
+  @@index([read])
+  @@index([type])
+}
+
+enum NotificationType {
+  STORY_PUBLISHED
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  REFUND_PROCESSED
+  ORDER_RECEIPT
+  WELCOME
+  OFFER
+  ANNOUNCEMENT
+}
+
+// ============================================
+// AUDIT & LOGGING
+// ============================================
+
+model AuditLog {
+  id                    String     @id @default(cuid())
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action                String
+  entity                String
+  entityId              String?
+  changes               Json?
+  ipAddress             String?
+  userAgent             String?
+  status                String     @default("SUCCESS")
+  errorMessage          String?
+
+  createdAt             DateTime   @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([entity])
+  @@index([createdAt])
+}
+
+model SystemLog {
+  id                    String     @id @default(cuid())
+  level                 LogLevel
+  category              String
+  message               String
+  metadata              Json?
+  stackTrace            String?
+
+  createdAt             DateTime   @default(now())
+
+  @@index([level])
+  @@index([category])
+  @@index([createdAt])
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
+}
+
+// ============================================
+// SETTINGS & CONFIGURATION
+// ============================================
+
+model SystemSettings {
+  id                    String     @id @default(cuid())
+  key                   String     @unique
+  value                 String
+  type                  String     @default("STRING")
+  description           String?
+  isSecret              Boolean    @default(false)
+
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  @@index([key])
+}
+
+model AnalyticsSnapshot {
+  id                    String     @id @default(cuid())
+  date                  String     // YYYY-MM-DD
+  totalRevenue          Int        @default(0)
+  totalOrders           Int        @default(0)
+  totalUsers            Int        @default(0)
+  totalStories          Int        @default(0)
+  totalViews            Int        @default(0)
+  newUsers              Int        @default(0)
+  paidOrders            Int        @default(0)
+  failedOrders          Int        @default(0)
+  topTemplates          Json?
+  metadata              Json?
+
+  createdAt             DateTime   @default(now())
+
+  @@unique([date])
+  @@index([date])
+}
