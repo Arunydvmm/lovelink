@@ -185,7 +185,7 @@ model Story {
   views                 Int        @default(0)
   uniqueVisits          Int        @default(0)
   viewedBy              String[]   // array of IP/user identifiers
-  orderId               String?
+  orderId               String?    @unique
   order                 Order?     @relation(fields: [orderId], references: [id])
 
   // Relations
@@ -224,7 +224,7 @@ model DraftStory {
 model Order {
   id                    String     @id @default(cuid())
   orderId               String     @unique // Razorpay order ID
-  storyId               String?
+  storyId               String?    @unique
   story                 Story?     @relation(fields: [storyId], references: [id])
   templateId            String
   template              Template   @relation(fields: [templateId], references: [id])
