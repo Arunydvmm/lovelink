@@ -10,13 +10,13 @@ import {
   getDraft,
   deleteDraft,
 } from '../controllers/storyController';
-import { authMiddleware, optionalAuthMiddleware } from '../middleware/authMiddleware';
+import { authMiddleware, optionalAuth } from '../middleware/authMiddleware';
 import { generalLimiter } from '../middleware/rateLimitMiddleware';
 
 const router = Router();
 
 // Public routes
-router.get('/:idOrSlug', generalLimiter, optionalAuthMiddleware, getStory);
+router.get('/:idOrSlug', generalLimiter, optionalAuth, getStory);
 router.post('/:id/increment-views', generalLimiter, incrementStoryViews);
 
 // Protected routes

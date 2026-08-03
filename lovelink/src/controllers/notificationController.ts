@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/db';
 import {
-  sendVerificationEmail,
   sendPasswordResetEmail,
   sendPaymentReceiptEmail,
   sendWelcomeEmail,
@@ -43,9 +42,11 @@ export const sendWelcomeNotification = async (req: Request, res: Response): Prom
 };
 
 // ============================================
-// RESEND VERIFICATION EMAIL
+// RESEND VERIFICATION EMAIL (DEPRECATED)
 // ============================================
-
+// NOTE: This function is deprecated. sendVerificationEmail does not exist in email service.
+// Email verification is typically handled during the auth flow.
+/*
 export const resendVerificationEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.userId;
@@ -86,6 +87,7 @@ export const resendVerificationEmail = async (req: Request, res: Response): Prom
     res.status(500).json({ error: 'Failed to send verification email' });
   }
 };
+*/
 
 // ============================================
 // SEND OFFER NOTIFICATION
