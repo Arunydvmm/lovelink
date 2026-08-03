@@ -7,10 +7,11 @@ import { CouponManager } from './CouponManager';
 import { LegalCmsManager } from './LegalCmsManager';
 import { AnnouncementManager } from './AnnouncementManager';
 import { PaymentGatewayManager } from './PaymentGatewayManager';
-import { IndianRupee, TrendingUp, Users, Heart, Eye, Tag, FileText, Megaphone, Layers, ShoppingBag, ShieldCheck, CreditCard, Lock, LogOut, KeyRound, UserCheck, Sparkles } from 'lucide-react';
+import { EmailTemplateManager } from './EmailTemplateManager';
+import { IndianRupee, TrendingUp, Users, Heart, Eye, Tag, FileText, Megaphone, Layers, ShoppingBag, ShieldCheck, CreditCard, Lock, LogOut, KeyRound, UserCheck, Sparkles, Mail } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'orders' | 'coupons' | 'legal' | 'announcements' | 'payment'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'orders' | 'coupons' | 'legal' | 'announcements' | 'payment' | 'email'>('overview');
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
 
   // Environment variable credentials
@@ -161,6 +162,7 @@ export const AdminDashboard: React.FC = () => {
           { id: 'templates', label: 'Template Builder & Management', icon: Layers },
           { id: 'orders', label: 'Orders & Payments', icon: ShoppingBag },
           { id: 'payment', label: 'Payment & Cloudinary Config', icon: CreditCard },
+          { id: 'email', label: 'Email Templates', icon: Mail },
           { id: 'coupons', label: 'Coupons & Promo Codes', icon: Tag },
           { id: 'legal', label: 'Legal CMS Manager', icon: FileText },
           { id: 'announcements', label: 'Announcement Bar', icon: Megaphone },
@@ -244,13 +246,16 @@ export const AdminDashboard: React.FC = () => {
       {/* TAB 4: PAYMENT CONFIG */}
       {activeTab === 'payment' && <PaymentGatewayManager />}
 
-      {/* TAB 5: COUPONS */}
+      {/* TAB 5: EMAIL TEMPLATES */}
+      {activeTab === 'email' && <EmailTemplateManager />}
+
+      {/* TAB 6: COUPONS */}
       {activeTab === 'coupons' && <CouponManager />}
 
-      {/* TAB 6: LEGAL CMS */}
+      {/* TAB 7: LEGAL CMS */}
       {activeTab === 'legal' && <LegalCmsManager />}
 
-      {/* TAB 7: ANNOUNCEMENT BAR */}
+      {/* TAB 8: ANNOUNCEMENT BAR */}
       {activeTab === 'announcements' && <AnnouncementManager />}
     </div>
   );
