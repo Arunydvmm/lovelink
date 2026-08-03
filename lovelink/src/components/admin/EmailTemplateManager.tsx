@@ -290,7 +290,7 @@ export const EmailTemplateManager: React.FC = () => {
             Email Template Manager
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Customize email templates sent to customers. Use variables like {{`{{customerName}}`}} to personalize emails.
+            Customize email templates sent to customers. Use variables like {'{{'} customerName {'}}'}  to personalize emails.
           </p>
         </div>
 
