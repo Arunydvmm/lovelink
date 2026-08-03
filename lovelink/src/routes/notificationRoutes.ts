@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import {
   sendWelcomeNotification,
-  resendVerificationEmail,
   sendOfferNotification,
   sendAnnouncement,
   getNotificationStats,
@@ -9,9 +8,6 @@ import {
 import { authMiddleware, requireAdmin } from '../middleware/authMiddleware';
 
 const router = Router();
-
-// User routes
-router.post('/resend-verification', authMiddleware, resendVerificationEmail);
 
 // Admin routes
 router.post('/welcome/:userId', authMiddleware, requireAdmin, sendWelcomeNotification);
