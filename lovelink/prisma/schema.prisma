@@ -225,7 +225,7 @@ model Order {
   id                    String     @id @default(cuid())
   orderId               String     @unique // Razorpay order ID
   storyId               String?    @unique
-  story                 Story?     @relation(fields: [storyId], references: [id])
+  story                 Story?
   templateId            String
   template              Template   @relation(fields: [templateId], references: [id])
   templateName          String
