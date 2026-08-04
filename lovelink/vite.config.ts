@@ -17,6 +17,10 @@ export default defineConfig(() => {
     },
     build: {
       rollupOptions: {
+        external: [
+          '@prisma/client',
+          '.prisma/client',
+        ],
         output: {
           manualChunks: {
             'vendor': ['react', 'react-dom'],
@@ -44,6 +48,7 @@ export default defineConfig(() => {
         'canvas-confetti',
         'qrcode',
       ],
+      exclude: ['@prisma/client', '.prisma/client'],
     },
   };
 });
