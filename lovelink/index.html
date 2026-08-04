@@ -5,43 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LoveLink - Create Beautiful Love Stories</title>
     <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        overflow-x: hidden;
       }
-      .loading {
-        text-align: center;
+      .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+      .hero { text-align: center; padding: 4rem 0; }
+      .hero h1 { 
+        font-size: 3.5rem; 
+        font-weight: bold; 
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+      .hero p { 
+        font-size: 1.3rem; 
+        margin-bottom: 2rem; 
+        opacity: 0.9; 
+        max-width: 600px; 
+        margin-left: auto; 
+        margin-right: auto; 
+      }
+      .btn {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background: #ff6b6b;
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      }
+      .btn:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 4rem 0;
+      }
+      .feature {
+        background: rgba(255,255,255,0.1);
         padding: 2rem;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
       }
-      .loading h1 {
-        font-size: 3rem;
-        margin: 0 0 1rem 0;
+      .feature h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+      .feature p { opacity: 0.9; line-height: 1.6; }
+      .stats { 
+        display: flex; 
+        justify-content: center; 
+        gap: 3rem; 
+        margin: 3rem 0; 
+        flex-wrap: wrap; 
       }
-      .loading p {
-        font-size: 1.2rem;
-        opacity: 0.9;
+      .stat { text-align: center; }
+      .stat-number { 
+        font-size: 3rem; 
+        font-weight: bold; 
+        display: block; 
+        color: #ff6b6b; 
       }
-      #root {
-        width: 100%;
-        min-height: 100vh;
+      .stat-label { 
+        font-size: 1rem; 
+        opacity: 0.8; 
+        margin-top: 0.5rem; 
+      }
+      .footer {
+        text-align: center;
+        padding: 2rem 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        margin-top: 4rem;
+      }
+      @media (max-width: 768px) {
+        .hero h1 { font-size: 2.5rem; }
+        .hero p { font-size: 1.1rem; }
+        .stats { gap: 2rem; }
+        .container { padding: 1rem; }
+      }
+      .loading-indicator {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
       }
     </style>
   </head>
   <body>
-    <div id="root">
-      <div class="loading">
+    <div class="container">
+      <div class="hero">
         <h1>💝 LoveLink</h1>
-        <p>Loading your beautiful love stories...</p>
-        <p style="font-size: 0.9rem; margin-top: 2rem;">If this message persists, check the browser console (F12) for errors.</p>
+        <p>Create beautiful, interactive digital love stories in minutes. Perfect for proposals, anniversaries, birthdays, and special moments.</p>
+        
+        <div>
+          <a href="/templates" class="btn">🎨 Browse Templates</a>
+          <a href="/demo" class="btn">▶️ Watch Demo</a>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-number">12+</span>
+          <div class="stat-label">Beautiful Templates</div>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5</span>
+          <div class="stat-label">Minutes to Create</div>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <div class="stat-label">Mobile Friendly</div>
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <h3>🎭 Interactive Stories</h3>
+          <p>Create engaging love stories with scratch cards, gift boxes, photo galleries, and custom music that your partner will love.</p>
+        </div>
+        
+        <div class="feature">
+          <h3>📱 Mobile Perfect</h3>
+          <p>Every story looks amazing on mobile. Your loved one can enjoy the surprise anywhere, anytime.</p>
+        </div>
+        
+        <div class="feature">
+          <h3>⚡ Quick & Easy</h3>
+          <p>Choose a template, add your photos and messages, and get a shareable link in just 5 minutes.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>&copy; 2024 LoveLink. Made with ❤️ for couples everywhere.</p>
+        <div style="margin-top: 1rem;">
+          <a href="/admin" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Admin</a>
+          <a href="/api/health" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Status</a>
+        </div>
       </div>
     </div>
+
+    <!-- React App will load here if JS works -->
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

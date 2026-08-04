@@ -8,35 +8,17 @@ import { sanitizeInput, sanitizeObject, getSecureHeaders } from '../lib/security
 // ============================================
 
 export const helmetMiddleware = helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: [
-        "'self'",
-        "'unsafe-inline'",
-        process.env.NODE_ENV === 'production' ? "'unsafe-eval'" : "'unsafe-eval'", // Required for Vite/React in production build
-      ],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
-      fontSrc: ["'self'", 'https:', 'data:'],
-      connectSrc: ["'self'", 'https:', 'wss:', 'ws:'],
-      frameSrc: ["'none'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : undefined,
-    },
-  },
+  contentSecurityPolicy: false, // DISABLE CSP COMPLETELY
   crossOriginEmbedderPolicy: false,
-  crossOriginOpenerPolicy: { policy: 'same-origin' },
-  crossOriginResourcePolicy: { policy: 'cross-origin' },
-  dnsPrefetchControl: { allow: false },
-  frameguard: { action: 'deny' },
-  hsts: process.env.NODE_ENV === 'production' 
-    ? { maxAge: 31536000, includeSubDomains: true, preload: true }
-    : false,
-  ieNoOpen: true,
-  noSniff: true,
-  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-  xssFilter: true,
+  crossOriginOpenerPolicy: false,
+  crossOriginResourcePolicy: false,
+  dnsPrefetchControl: false,
+  frameguard: false,
+  hsts: false,
+  ieNoOpen: false,
+  noSniff: false,
+  referrerPolicy: false,
+  xssFilter: false,
   permittedCrossDomainPolicies: false,
 });
 
