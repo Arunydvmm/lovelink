@@ -8,25 +8,31 @@ import { sanitizeInput, sanitizeObject, getSecureHeaders } from '../lib/security
 // ============================================
 
 export const helmetMiddleware = helmet({
-  contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
+  contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        process.env.NODE_ENV === 'production' ? "'unsafe-eval'" : "'unsafe-eval'", // Required for Vite/React in production build
+      ],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
-      fontSrc: ["'self'", 'https:'],
-      connectSrc: ["'self'", 'https:', 'wss:'],
+      fontSrc: ["'self'", 'https:', 'data:'],
+      connectSrc: ["'self'", 'https:', 'wss:', 'ws:'],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
+      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : undefined,
     },
-  } : false, // Disable CSP in development to allow Vite HMR
+  },
   crossOriginEmbedderPolicy: false,
   crossOriginOpenerPolicy: { policy: 'same-origin' },
   crossOriginResourcePolicy: { policy: 'cross-origin' },
   dnsPrefetchControl: { allow: false },
   frameguard: { action: 'deny' },
-  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+  hsts: process.env.NODE_ENV === 'production' 
+    ? { maxAge: 31536000, includeSubDomains: true, preload: true }
+    : false,
   ieNoOpen: true,
   noSniff: true,
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
