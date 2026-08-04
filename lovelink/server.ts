@@ -101,11 +101,242 @@ async function startServer() {
   });
 
   // ============================================
+  // LOGIN PAGE
+  // ============================================
+  
+  app.get('/login', (req: Request, res: Response) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LoveLink</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff6b9d, #a855f7);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .link {
+            color: #ff6b9d;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        .back-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-top: 2rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">💝 LoveLink</div>
+        <h2>Welcome Back</h2>
+        <p style="margin-bottom: 2rem; opacity: 0.8;">Sign in to create beautiful love stories</p>
+        
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="Your password" required>
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        
+        <div style="margin: 2rem 0;">
+            <a href="#" class="link" onclick="alert('Google login coming soon!')">Continue with Google</a>
+        </div>
+        
+        <p style="opacity: 0.8;">
+            Don't have an account? 
+            <a href="#" class="link" onclick="alert('Registration coming soon!')">Sign up</a>
+        </p>
+        
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            alert('Login functionality coming soon!\\n\\nFor now, enjoy browsing templates and features.\\n\\nFull authentication will be available soon.');
+        }
+    </script>
+</body>
+</html>`);
+  });
+
+  // ============================================
   // SIMPLE ADMIN ACCESS (Development/Demo)
   // ============================================
   
   app.get('/admin', (req: Request, res: Response) => {
-    // For development/demo - serve a simple admin page
+    // Simple password protection for admin access
+    const adminPassword = req.query.password || req.headers.authorization;
+    
+    if (adminPassword !== 'admin123') {
+      return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-form {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .login-form h1 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff6b9d, #a855f7);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .back-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <h1>🔐 Admin Access</h1>
+        <p style="margin-bottom: 2rem; opacity: 0.8;">Enter admin password to continue</p>
+        
+        <form action="/admin" method="GET">
+            <div class="form-group">
+                <label>Admin Password</label>
+                <input type="password" name="password" placeholder="Enter admin password" required>
+            </div>
+            <button type="submit" class="btn">Access Admin Panel</button>
+        </form>
+        
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>`);
+    }
+    
+    // Admin authenticated, show admin panel
     res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>

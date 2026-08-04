@@ -689,7 +689,8 @@
           <a href="#templates">Templates</a>
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
+          <a href="/login">Login</a>
         </div>
         
         <a href="#create" class="cta-nav">
@@ -921,6 +922,96 @@
         </div>
       </section>
 
+      <!-- Pricing Section -->
+      <section id="pricing" class="templates">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <p class="section-subtitle">
+          Start free or upgrade for premium features and unlimited creations
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1000px; margin: 3rem auto 0;">
+          <!-- Free Plan -->
+          <div class="feature-card" style="border: 2px solid rgba(255,255,255,0.2);">
+            <h3 style="color: #10b981; margin-bottom: 0.5rem;">Free</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹0</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ 3 Basic Templates</li>
+              <li>✅ Up to 10 Photos</li>
+              <li>✅ Basic Customization</li>
+              <li>✅ Shareable Link</li>
+              <li>❌ Premium Templates</li>
+              <li>❌ Custom Music</li>
+              <li>❌ Password Protection</li>
+            </ul>
+            <a href="#create" class="btn btn-secondary" style="width: 100%;">Get Started Free</a>
+          </div>
+          
+          <!-- Premium Plan -->
+          <div class="feature-card" style="border: 3px solid #ff6b9d; position: relative;">
+            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff6b9d, #a855f7); padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">POPULAR</div>
+            <h3 style="color: #ff6b9d; margin-bottom: 0.5rem;">Premium</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹299</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ All Free Features</li>
+              <li>✅ 12+ Premium Templates</li>
+              <li>✅ Unlimited Photos & Videos</li>
+              <li>✅ Custom Music Upload</li>
+              <li>✅ Password Protection</li>
+              <li>✅ QR Code Generation</li>
+              <li>✅ Priority Support</li>
+            </ul>
+            <a href="#create" class="btn btn-primary" style="width: 100%;">Choose Premium</a>
+          </div>
+          
+          <!-- Creator Plan -->
+          <div class="feature-card" style="border: 2px solid rgba(255,255,255,0.2);">
+            <h3 style="color: #a855f7; margin-bottom: 0.5rem;">Creator</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹499</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ All Premium Features</li>
+              <li>✅ Custom Domain</li>
+              <li>✅ Advanced Analytics</li>
+              <li>✅ Bulk Creation</li>
+              <li>✅ API Access</li>
+              <li>✅ White Label Option</li>
+              <li>✅ 24/7 Support</li>
+            </ul>
+            <a href="#create" class="btn" style="width: 100%; background: linear-gradient(135deg, #a855f7, #8b5cf6);">Choose Creator</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="how-it-works">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+          Have questions or need help creating your perfect surprise?
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 800px; margin: 3rem auto 0;">
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📧</span>
+            <h3>Email Support</h3>
+            <p style="margin: 1rem 0;">Get help with your love stories</p>
+            <a href="mailto:support@lovelink.com" class="btn btn-secondary">support@lovelink.com</a>
+          </div>
+          
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">💬</span>
+            <h3>Live Chat</h3>
+            <p style="margin: 1rem 0;">Instant help when you need it</p>
+            <button class="btn btn-primary" onclick="alert('Live chat feature coming soon!')">Start Chat</button>
+          </div>
+          
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📚</span>
+            <h3>Help Center</h3>
+            <p style="margin: 1rem 0;">Browse our guides and tutorials</p>
+            <button class="btn btn-secondary" onclick="alert('Help center coming soon!')">View Guides</button>
+          </div>
+        </div>
+      </section>
+
       <!-- Final CTA -->
       <section class="hero" style="padding: 4rem 1.5rem;">
         <div class="hero-content">
@@ -958,30 +1049,20 @@
         <span class="mobile-nav-icon">💎</span>
         Pricing
       </a>
-      <a href="/admin" class="mobile-nav-item">
-        <span class="mobile-nav-icon">👤</span>
-        Admin
+      <a href="#contact" class="mobile-nav-item">
+        <span class="mobile-nav-icon">💝</span>
+        Contact
       </a>
     </nav>
 
     <!-- React App Container (Hidden initially, shown when React loads) -->
     <div id="root" style="display: none;"></div>
 
-    <!-- Status Links & Admin Access -->
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-      <!-- Admin Access Button -->
-      <a href="/admin" 
-         style="display: inline-block; padding: 12px 20px; background: linear-gradient(135deg, #ff6b9d, #a855f7); color: white; text-decoration: none; border-radius: 25px; font-weight: 600; margin: 5px; box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4); transition: all 0.3s ease;"
-         onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(255, 107, 157, 0.6)';"
-         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(255, 107, 157, 0.4)';">
-        ⚙️ Admin Panel
-      </a>
-      <br>
-      <!-- Health Status Button -->
-      <a href="/api/health" 
-         style="display: inline-block; padding: 8px 16px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; text-decoration: none; border-radius: 20px; font-size: 0.8rem; margin: 5px; border: 1px solid rgba(255,255,255,0.2);">
-        📊 Status
-      </a>
+    <!-- Status Links (Hidden but accessible via direct URL) -->
+    <div style="display: none;">
+      <a href="/api/health">API Health</a>
+      <a href="/emergency">Emergency Access</a>
+      <a href="/test-csp-safe">CSP Test</a>
     </div>
 
     <!-- Enable React App Loading -->
@@ -1048,8 +1129,8 @@
             this.classList.add('active');
             
             // Handle special routes
-            if (this.href.includes('/admin')) {
-              // Let it navigate normally
+            if (this.href.includes('/login')) {
+              // Let it navigate normally to login
               return;
             }
             
