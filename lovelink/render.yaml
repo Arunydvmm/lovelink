@@ -8,6 +8,9 @@ services:
     plan: starter  # Free tier
     
     # Build configuration
+    # IMPORTANT: Ensure these env vars are set in Render dashboard:
+    # - DATABASE_URL (from PostgreSQL database service)
+    # - NODE_ENV=production
     buildCommand: npm install && npx prisma generate && npm run build && npx prisma migrate deploy
     startCommand: npm start
     
@@ -92,16 +95,10 @@ services:
         sync: false  # Set in Render dashboard (optional)
       
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: lovelink
-          property: url
+        value: https://lovelinkkk.onrender.com
       
       - key: VITE_APP_URL
-        fromService:
-          type: web
-          name: lovelink
-          property: url
+        value: https://lovelinkkk.onrender.com
       
       - key: VITE_APP_NAME
         value: LoveLink
@@ -134,10 +131,7 @@ services:
         value: true
       
       - key: ALLOWED_ORIGINS
-        fromService:
-          type: web
-          name: lovelink
-          property: url
+        value: https://lovelinkkk.onrender.com,https://www.lovelinkkk.onrender.com
 
 # Database (PostgreSQL)
 databases:

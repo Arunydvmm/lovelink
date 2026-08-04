@@ -38,23 +38,61 @@ export const helmetMiddleware = helmet({
 // CORS CONFIGURATION
 // ============================================
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://lovelink.app',
-];
+const getConfiguredOrigins = (): string[] => {
+  // Parse from environment variable - supports comma-separated origins
+  if (process.env.ALLOWED_ORIGINS) {
+    return process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
+  }
+
+  // Default development origins
+  return [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+  ];
+};
+
+const allowedOrigins = getConfiguredOrigins();
+
+// Log CORS configuration in development
+if (process.env.NODE_ENV !== 'production') {
+  console.log('🔐 CORS Origins:', allowedOrigins);
+}
 
 export const corsMiddleware = cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or Curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Check if origin matches any allowed origin or if it's production with dynamic URL
+    const isAllowed = allowedOrigins.some(allowed => {
+      // Exact match
+      if (origin === allowed) return true;
+
+      // Wildcard match for subdomains (e.g., *.onrender.com)
+      if (allowed.includes('*')) {
+        const regex = new RegExp('^' + allowed.replace(/\*/g, '.*') + '$');
+        return regex.test(origin);
+      }
+
+      return false;
+    });
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      // Log rejected origins for debugging
+      console.warn(`⚠️ CORS rejected origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length', 'X-Request-ID'],
   optionsSuccessStatus: 200,
   maxAge: 86400,
 });
