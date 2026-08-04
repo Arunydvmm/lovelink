@@ -32,13 +32,8 @@ export default defineConfig(() => {
         },
       },
       chunkSizeWarningLimit: 1000,
-      sourcemap: process.env.NODE_ENV === 'production' ? 'hidden' : true,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: process.env.NODE_ENV === 'production',
-        },
-      },
+      sourcemap: false, // DISABLE sourcemaps (they can use eval)
+      minify: false, // DISABLE minification (terser can use eval)
       outDir: 'dist',
       emptyOutDir: false, // Don't delete server files
       assetsDir: 'assets',

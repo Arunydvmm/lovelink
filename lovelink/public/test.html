@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TEST - No CSP</title>
+</head>
+<body>
+  <h1>🔥 ULTRA MINIMAL TEST PAGE</h1>
+  <p>If you can see this, HTML is working.</p>
+  
+  <script>
+    // This should work if CSP is truly disabled
+    console.log('✅ JavaScript is working!');
+    eval('console.log("✅ eval() is working - NO CSP!")');
+    
+    // Test setTimeout with string (also uses eval internally)
+    setTimeout('console.log("✅ setTimeout with string works - NO CSP!")', 100);
+    
+    document.body.innerHTML += '<p style="color: green;">✅ Script executed successfully - CSP is OFF!</p>';
+  </script>
+</body>
+</html>

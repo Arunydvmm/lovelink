@@ -93,6 +93,47 @@ async function startServer() {
   });
 
   // ============================================
+  // ULTRA MINIMAL CSP TEST - RENDER.COM DEBUG
+  // ============================================
+
+  app.get('/test-no-csp', (req: Request, res: Response) => {
+    // Remove ALL possible CSP headers
+    res.removeHeader('Content-Security-Policy');
+    res.removeHeader('content-security-policy');
+    res.removeHeader('X-Content-Security-Policy');
+    res.removeHeader('X-WebKit-CSP');
+    
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(`<!doctype html>
+<html><head><meta charset="UTF-8"><title>🔥 NO CSP TEST</title></head>
+<body style="font-family: monospace; padding: 20px; background: #000; color: #0f0;">
+<h1>🔥 RENDER.COM CSP TEST</h1>
+<p>Testing if Render.com injects CSP headers at platform level...</p>
+<div id="results"></div>
+<script>
+try {
+  console.log('✅ JavaScript works');
+  document.getElementById('results').innerHTML += '<p>✅ JavaScript works</p>';
+  
+  eval('console.log("✅ eval() works - NO CSP!")');
+  document.getElementById('results').innerHTML += '<p style="color: lime; font-weight: bold;">✅ eval() works - CSP IS OFF!</p>';
+  
+  setTimeout('console.log("✅ setTimeout with string works")', 10);
+  document.getElementById('results').innerHTML += '<p style="color: lime;">✅ setTimeout with string works</p>';
+  
+  document.getElementById('results').innerHTML += '<p style="color: yellow; font-size: 18px; font-weight: bold;">🎉 SUCCESS: No CSP blocking detected!</p>';
+} catch(e) {
+  console.error('❌ CSP Error:', e);
+  document.getElementById('results').innerHTML += '<p style="color: red; font-weight: bold;">❌ CSP Error: ' + e.message + '</p>';
+  if (e.message.includes('Content Security Policy')) {
+    document.getElementById('results').innerHTML += '<p style="color: red;">🚫 Render.com IS injecting CSP headers!</p>';
+  }
+}
+</script>
+</body></html>`);
+  });
+
+  // ============================================
   // DEBUG ENDPOINT (Development & Production)
   // ============================================
 
