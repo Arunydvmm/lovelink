@@ -8,19 +8,19 @@ import { sanitizeInput, sanitizeObject, getSecureHeaders } from '../lib/security
 // ============================================
 
 export const helmetMiddleware = helmet({
-  contentSecurityPolicy: {
+  contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
       fontSrc: ["'self'", 'https:'],
       connectSrc: ["'self'", 'https:', 'wss:'],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : undefined,
+      upgradeInsecureRequests: [],
     },
-  },
+  } : false, // Disable CSP in development to allow Vite HMR
   crossOriginEmbedderPolicy: false,
   crossOriginOpenerPolicy: { policy: 'same-origin' },
   crossOriginResourcePolicy: { policy: 'cross-origin' },

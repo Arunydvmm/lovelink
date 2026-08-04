@@ -20,6 +20,8 @@ export default defineConfig(() => {
         external: [
           '@prisma/client',
           '.prisma/client',
+          '@prisma/client/index-browser',
+          '.prisma/client/index-browser',
         ],
         output: {
           manualChunks: {
@@ -37,6 +39,9 @@ export default defineConfig(() => {
           drop_console: process.env.NODE_ENV === 'production',
         },
       },
+      outDir: 'dist',
+      emptyOutDir: false, // Don't delete server files
+      assetsDir: 'assets',
     },
     optimizeDeps: {
       include: [
@@ -48,7 +53,12 @@ export default defineConfig(() => {
         'canvas-confetti',
         'qrcode',
       ],
-      exclude: ['@prisma/client', '.prisma/client'],
+      exclude: [
+        '@prisma/client',
+        '.prisma/client',
+        '@prisma/client/index-browser',
+        '.prisma/client/index-browser',
+      ],
     },
   };
 });
