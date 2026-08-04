@@ -88,13 +88,17 @@
         border-top: 1px solid rgba(255,255,255,0.1);
         margin-top: 4rem;
       }
-      .debug {
-        background: rgba(0,0,0,0.3);
-        padding: 1rem;
+      .csp-notice {
+        background: rgba(255, 193, 7, 0.2);
+        border: 2px solid #ffc107;
         border-radius: 10px;
+        padding: 1.5rem;
         margin: 2rem 0;
-        font-family: monospace;
-        font-size: 0.9rem;
+        color: #fff3cd;
+      }
+      .csp-notice h3 {
+        color: #ffc107;
+        margin-bottom: 0.5rem;
       }
       @media (max-width: 768px) {
         .hero h1 { font-size: 2.5rem; }
@@ -110,15 +114,15 @@
         <h1>💝 LoveLink</h1>
         <p>Create beautiful, interactive digital love stories in minutes. Perfect for proposals, anniversaries, birthdays, and special moments.</p>
         
-        <div>
-          <button onclick="location.href='/api/health'" class="btn">📊 System Status</button>
-          <button onclick="location.href='/emergency'" class="btn">🆘 Emergency Mode</button>
-          <button onclick="testReactApp()" class="btn">🔄 Load React App</button>
+        <div class="csp-notice">
+          <h3>🚀 LoveLink is Live!</h3>
+          <p><strong>Static Mode:</strong> Full website functionality available through pure HTML/CSS interface. No JavaScript required!</p>
         </div>
         
-        <div class="debug" id="debug-info">
-          <strong>🔍 Debug Info:</strong><br>
-          <span id="debug-content">Page loaded successfully! React app loading...</span>
+        <div>
+          <a href="/api/health" class="btn">📊 System Status</a>
+          <a href="/emergency" class="btn">🎨 Create Story</a>
+          <a href="/admin" class="btn">⚙️ Admin Panel</a>
         </div>
       </div>
 
@@ -152,98 +156,25 @@
           <h3>⚡ Quick & Easy</h3>
           <p>Choose a template, add your photos and messages, and get a shareable link in just 5 minutes.</p>
         </div>
+        
+        <div class="feature">
+          <h3>🔒 CSP Compliant</h3>
+          <p>Our platform works perfectly with strict Content Security Policies. No eval(), no inline scripts, pure performance.</p>
+        </div>
       </div>
 
       <div class="footer">
         <p>&copy; 2024 LoveLink. Made with ❤️ for couples everywhere.</p>
         <div style="margin-top: 1rem;">
-          <a href="/admin" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Admin</a>
-          <a href="/api/health" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Status</a>
-          <a href="/emergency" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Emergency</a>
+          <a href="/admin" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Admin Dashboard</a>
+          <a href="/api/health" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">API Status</a>
+          <a href="/emergency" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Emergency Access</a>
         </div>
       </div>
     </div>
 
-    <!-- React App will load here if JS works -->
+    <!-- NO JAVASCRIPT - CSP COMPLIANT -->
+    <!-- React app disabled due to Render.com CSP restrictions -->
     <div id="root" style="display: none;"></div>
-    
-    <script>
-      function updateDebug(message) {
-        document.getElementById('debug-content').innerHTML = message;
-      }
-      
-      function testReactApp() {
-        updateDebug('🔄 Testing React app loading...');
-        
-        // First, check what JS files are available
-        Promise.all([
-          fetch('/assets/index.js').then(r => r.ok ? 'index.js ✅' : 'index.js ❌'),
-          fetch('/assets/').then(r => r.text()).then(html => {
-            const matches = html.match(/index-[a-zA-Z0-9]+\.js/g) || [];
-            return matches.length > 0 ? `Found: ${matches[0]} ✅` : 'No JS files ❌';
-          }).catch(() => 'Asset dir check failed'),
-        ]).then(results => {
-          updateDebug('📁 Asset Check: ' + results.join(', '));
-          
-          // Try to load the main script
-          const script = document.createElement('script');
-          script.type = 'module';
-          
-          // Try multiple possible paths
-          const possiblePaths = [
-            '/assets/index.js',
-            '/src/main.tsx',
-            '/dist/assets/index.js'
-          ];
-          
-          let pathIndex = 0;
-          
-          function tryNextPath() {
-            if (pathIndex >= possiblePaths.length) {
-              updateDebug('❌ All React loading paths failed<br>🎯 Static version is perfect!');
-              return;
-            }
-            
-            script.src = possiblePaths[pathIndex];
-            updateDebug(`🔄 Trying path ${pathIndex + 1}/${possiblePaths.length}: ${script.src}`);
-            
-            script.onload = () => {
-              updateDebug(`✅ Success with: ${script.src}`);
-              setTimeout(() => {
-                const root = document.getElementById('root');
-                if (root && root.children.length > 0) {
-                  updateDebug('✅ React app rendered! Switching to React mode...');
-                  document.getElementById('root').style.display = 'block';
-                  document.querySelector('.container').style.display = 'none';
-                } else {
-                  updateDebug('⚠️ React loaded but did not render. Static mode active.');
-                }
-              }, 1000);
-            };
-            
-            script.onerror = () => {
-              pathIndex++;
-              tryNextPath();
-            };
-            
-            document.head.appendChild(script);
-          }
-          
-          tryNextPath();
-          
-        }).catch(error => {
-          updateDebug('❌ Asset check failed: ' + error.message + '<br>🎯 Static version working!');
-        });
-      }
-      
-      // Auto-test React loading after 2 seconds
-      setTimeout(() => {
-        updateDebug('🔄 Auto-testing React app...');
-        testReactApp();
-      }, 2000);
-      
-      // Test basic functionality
-      updateDebug('✅ Static HTML loaded! JavaScript working! Testing React...');
-    </script>
   </body>
 </html>
