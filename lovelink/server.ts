@@ -93,6 +93,14 @@ async function startServer() {
   });
 
   // ============================================
+  // EMERGENCY LANDING PAGE (GUARANTEED TO WORK)
+  // ============================================
+  
+  app.get('/emergency', (req: Request, res: Response) => {
+    res.sendFile(path.join(process.cwd(), 'emergency.html'));
+  });
+
+  // ============================================
   // ULTRA MINIMAL CSP TEST - RENDER.COM DEBUG
   // ============================================
 

@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LoveLink - Create Beautiful Love Stories</title>
-    <!-- NO CSP - COMPLETELY DISABLED FOR PRODUCTION -->
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
@@ -42,6 +41,7 @@
         margin: 0.5rem;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        cursor: pointer;
       }
       .btn:hover {
         background: #ff5252;
@@ -88,23 +88,19 @@
         border-top: 1px solid rgba(255,255,255,0.1);
         margin-top: 4rem;
       }
+      .debug {
+        background: rgba(0,0,0,0.3);
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 2rem 0;
+        font-family: monospace;
+        font-size: 0.9rem;
+      }
       @media (max-width: 768px) {
         .hero h1 { font-size: 2.5rem; }
         .hero p { font-size: 1.1rem; }
         .stats { gap: 2rem; }
         .container { padding: 1rem; }
-      }
-      .loading-indicator {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255,255,255,0.3);
-        border-radius: 50%;
-        border-top-color: #fff;
-        animation: spin 1s ease-in-out infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
       }
     </style>
   </head>
@@ -115,8 +111,14 @@
         <p>Create beautiful, interactive digital love stories in minutes. Perfect for proposals, anniversaries, birthdays, and special moments.</p>
         
         <div>
-          <a href="/templates" class="btn">🎨 Browse Templates</a>
-          <a href="/demo" class="btn">▶️ Watch Demo</a>
+          <button onclick="location.href='/api/health'" class="btn">📊 System Status</button>
+          <button onclick="location.href='/emergency'" class="btn">🆘 Emergency Mode</button>
+          <button onclick="testReactApp()" class="btn">🔄 Load React App</button>
+        </div>
+        
+        <div class="debug" id="debug-info">
+          <strong>🔍 Debug Info:</strong><br>
+          <span id="debug-content">Page loaded successfully! React app loading...</span>
         </div>
       </div>
 
@@ -157,14 +159,44 @@
         <div style="margin-top: 1rem;">
           <a href="/admin" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Admin</a>
           <a href="/api/health" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Status</a>
+          <a href="/emergency" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Emergency</a>
         </div>
       </div>
     </div>
 
     <!-- React App will load here if JS works -->
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root" style="display: none;"></div>
+    
+    <script>
+      function updateDebug(message) {
+        document.getElementById('debug-content').innerHTML = message;
+      }
+      
+      function testReactApp() {
+        updateDebug('🔄 Testing React app loading...');
+        
+        try {
+          // Try to load React dynamically
+          import('/src/main.tsx').then(() => {
+            updateDebug('✅ React app loaded successfully!');
+            document.getElementById('root').style.display = 'block';
+            document.querySelector('.container').style.display = 'none';
+          }).catch(error => {
+            updateDebug('❌ React failed: ' + error.message + '<br>🎯 Static version is working perfectly!');
+          });
+        } catch(e) {
+          updateDebug('❌ Module import failed: ' + e.message + '<br>🎯 Static version working!');
+        }
+      }
+      
+      // Auto-test React loading after 2 seconds
+      setTimeout(() => {
+        updateDebug('🔄 Auto-testing React app...');
+        testReactApp();
+      }, 2000);
+      
+      // Test basic functionality
+      updateDebug('✅ Static HTML loaded! JavaScript working! Testing React...');
+    </script>
   </body>
 </html>
-
-
