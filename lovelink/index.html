@@ -964,14 +964,110 @@
       </a>
     </nav>
 
-    <!-- React App Container (Hidden) -->
+    <!-- React App Container (Hidden initially, shown when React loads) -->
     <div id="root" style="display: none;"></div>
 
-    <!-- Status Links (Hidden but accessible) -->
-    <div style="display: none;">
-      <a href="/api/health">API Health</a>
-      <a href="/emergency">Emergency Access</a>
-      <a href="/test-csp-safe">CSP Test</a>
+    <!-- Status Links & Admin Access -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+      <!-- Admin Access Button -->
+      <a href="/admin" 
+         style="display: inline-block; padding: 12px 20px; background: linear-gradient(135deg, #ff6b9d, #a855f7); color: white; text-decoration: none; border-radius: 25px; font-weight: 600; margin: 5px; box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4); transition: all 0.3s ease;"
+         onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(255, 107, 157, 0.6)';"
+         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(255, 107, 157, 0.4)';">
+        ⚙️ Admin Panel
+      </a>
+      <br>
+      <!-- Health Status Button -->
+      <a href="/api/health" 
+         style="display: inline-block; padding: 8px 16px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; text-decoration: none; border-radius: 20px; font-size: 0.8rem; margin: 5px; border: 1px solid rgba(255,255,255,0.2);">
+        📊 Status
+      </a>
     </div>
+
+    <!-- Enable React App Loading -->
+    <script>
+      // Simple function to show React app when it loads
+      function showReactApp() {
+        const root = document.getElementById('root');
+        const mainContent = document.querySelector('.main-content');
+        
+        if (root && root.children.length > 0) {
+          // React app has loaded, show it
+          root.style.display = 'block';
+          if (mainContent) mainContent.style.display = 'none';
+          document.querySelector('.navbar').style.display = 'none';
+          document.querySelector('.mobile-nav').style.display = 'none';
+        }
+      }
+      
+      // Check for React app every 1 second for 10 seconds
+      let checkCount = 0;
+      const checkInterval = setInterval(() => {
+        checkCount++;
+        showReactApp();
+        
+        if (checkCount >= 10) {
+          clearInterval(checkInterval);
+        }
+      }, 1000);
+      
+      // Make CTA buttons functional
+      document.addEventListener('DOMContentLoaded', function() {
+        // Create button click handlers
+        const createButtons = document.querySelectorAll('[href="#create"]');
+        const templateButtons = document.querySelectorAll('[href="#templates"]');
+        
+        createButtons.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Try to load React app first, then redirect if needed
+            setTimeout(() => {
+              if (document.getElementById('root').children.length === 0) {
+                // React not loaded, redirect to admin for now
+                window.location.href = '/admin';
+              }
+            }, 500);
+          });
+        });
+        
+        templateButtons.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Scroll to templates section for now
+            document.getElementById('templates').scrollIntoView({behavior: 'smooth'});
+          });
+        });
+        
+        // Make mobile nav functional
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        mobileNavItems.forEach(item => {
+          item.addEventListener('click', function(e) {
+            // Remove active class from all
+            mobileNavItems.forEach(nav => nav.classList.remove('active'));
+            // Add active class to clicked item
+            this.classList.add('active');
+            
+            // Handle special routes
+            if (this.href.includes('/admin')) {
+              // Let it navigate normally
+              return;
+            }
+            
+            // Handle anchor links
+            if (this.href.includes('#')) {
+              e.preventDefault();
+              const target = this.href.split('#')[1];
+              const element = document.getElementById(target);
+              if (element) {
+                element.scrollIntoView({behavior: 'smooth'});
+              }
+            }
+          });
+        });
+      });
+    </script>
+
+    <!-- Load React App -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
-</html>
+</html>>

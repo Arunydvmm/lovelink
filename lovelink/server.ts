@@ -101,6 +101,155 @@ async function startServer() {
   });
 
   // ============================================
+  // SIMPLE ADMIN ACCESS (Development/Demo)
+  // ============================================
+  
+  app.get('/admin', (req: Request, res: Response) => {
+    // For development/demo - serve a simple admin page
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveLink Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #ff6b9d, #a855f7);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 600;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="btn back-btn">← Back to Home</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>💝 LoveLink Admin Panel</h1>
+            <p>Manage your LoveLink platform</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>📊 Dashboard Stats</h3>
+                <p>View platform analytics and key metrics</p>
+                <a href="/api/admin/stats" class="btn" target="_blank">View Stats API</a>
+                <a href="/api/health" class="btn btn-secondary" target="_blank">Health Check</a>
+            </div>
+            
+            <div class="card">
+                <h3>🎨 Template Management</h3>
+                <p>Manage love story templates</p>
+                <a href="/api/templates" class="btn" target="_blank">View Templates</a>
+                <button class="btn btn-secondary" onclick="alert('Template editor coming soon!')">Create Template</button>
+            </div>
+            
+            <div class="card">
+                <h3>👥 User Management</h3>
+                <p>Manage user accounts and permissions</p>
+                <button class="btn" onclick="alert('User management coming soon!')">View Users</button>
+                <button class="btn btn-secondary" onclick="alert('Coming soon!')">User Analytics</button>
+            </div>
+            
+            <div class="card">
+                <h3>💳 Orders & Payments</h3>
+                <p>Monitor transactions and revenue</p>
+                <button class="btn" onclick="alert('Payment dashboard coming soon!')">View Orders</button>
+                <button class="btn btn-secondary" onclick="alert('Coming soon!')">Revenue Reports</button>
+            </div>
+            
+            <div class="card">
+                <h3>📝 Content Management</h3>
+                <p>Manage site content and announcements</p>
+                <button class="btn" onclick="alert('CMS coming soon!')">Edit Content</button>
+                <button class="btn btn-secondary" onclick="alert('Coming soon!')">Announcements</button>
+            </div>
+            
+            <div class="card">
+                <h3>⚙️ System Settings</h3>
+                <p>Configure platform settings</p>
+                <a href="/test-csp-safe" class="btn" target="_blank">CSP Test</a>
+                <a href="/emergency" class="btn btn-secondary" target="_blank">Emergency Mode</a>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <p style="opacity: 0.8;">
+                💡 <strong>Note:</strong> Full admin functionality will be available once authentication is set up.<br>
+                Current API endpoints are available for testing and integration.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`);
+  });
+
+  // ============================================
   // ULTRA MINIMAL CSP TEST - RENDER.COM DEBUG
   // ============================================
 
