@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Template, CategoryId } from '../types';
 import { INITIAL_CATEGORIES } from '../data/initialDb';
-import { store } from '../lib/store';
+import { api } from '../lib/api';
 import { Sparkles, Search, Filter, Tag, Heart } from 'lucide-react';
 
 interface TemplatesPageProps {
@@ -19,7 +19,9 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({
   const [priceFilter, setPriceFilter] = useState<'all' | 'free' | 'premium'>('all');
 
   useEffect(() => {
-    store.getTemplates().then(setTemplates);
+    api.getTemplates().then(setTemplates).catch((error) => {
+      console.error('Failed to load templates:', error);
+    });
   }, []);
 
   const filteredTemplates = templates.filter((t) => {

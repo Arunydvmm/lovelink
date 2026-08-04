@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Template } from '../types';
 import { INITIAL_CATEGORIES } from '../data/initialDb';
-import { store } from '../lib/store';
+import { api } from '../lib/api';
 import { Heart, Sparkles, Smartphone, CheckCircle2, Clock, ShieldCheck, ArrowRight, Play, Star, ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -14,8 +14,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectTemplate
   const [trendingTemplates, setTrendingTemplates] = useState<Template[]>([]);
 
   useEffect(() => {
-    store.getTemplates().then((tmpls) => {
+    api.getTemplates().then((tmpls) => {
       setTrendingTemplates(tmpls.slice(0, 3));
+    }).catch((error) => {
+      console.error('Failed to load trending templates:', error);
     });
   }, []);
 
