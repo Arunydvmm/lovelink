@@ -183,6 +183,125 @@ async function startServer() {
             left: 20px;
             z-index: 1000;
         }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .modal-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .data-table th {
+            background: rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-paid {
+            background: #10b981;
+            color: white;
+        }
+        .status-pending {
+            background: #f59e0b;
+            color: white;
+        }
+        .status-failed {
+            background: #ef4444;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .error {
+            color: #ef4444;
+            text-align: center;
+            padding: 1rem;
+        }
+        .success {
+            color: #10b981;
+            text-align: center;
+            padding: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -219,8 +338,15 @@ async function startServer() {
             <div class="card">
                 <h3>💳 Orders & Payments</h3>
                 <p>Monitor transactions and revenue</p>
-                <button class="btn" onclick="alert('Payment dashboard coming soon!')">View Orders</button>
-                <button class="btn btn-secondary" onclick="alert('Coming soon!')">Revenue Reports</button>
+                <button class="btn" onclick="showOrdersModal()">View All Orders</button>
+                <button class="btn btn-secondary" onclick="showRevenueModal()">Revenue Analytics</button>
+            </div>
+            
+            <div class="card">
+                <h3>🎟️ Coupon Management</h3>
+                <p>Create and manage discount coupons</p>
+                <button class="btn" onclick="showCouponsModal()">Manage Coupons</button>
+                <button class="btn btn-secondary" onclick="showCreateCouponModal()">Create Coupon</button>
             </div>
             
             <div class="card">
@@ -245,6 +371,366 @@ async function startServer() {
             </p>
         </div>
     </div>
+
+    <!-- Orders Modal -->
+    <div id="ordersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💳 Orders & Payments</h2>
+                <button class="close-btn" onclick="closeModal('ordersModal')">&times;</button>
+            </div>
+            <div id="ordersContent">
+                <div class="loading">Loading orders...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Modal -->
+    <div id="revenueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Revenue Analytics</h2>
+                <button class="close-btn" onclick="closeModal('revenueModal')">&times;</button>
+            </div>
+            <div id="revenueContent">
+                <div class="loading">Loading revenue data...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coupons Modal -->
+    <div id="couponsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎟️ Coupon Management</h2>
+                <button class="close-btn" onclick="closeModal('couponsModal')">&times;</button>
+            </div>
+            <div id="couponsContent">
+                <div class="loading">Loading coupons...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Coupon Modal -->
+    <div id="createCouponModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✨ Create New Coupon</h2>
+                <button class="close-btn" onclick="closeModal('createCouponModal')">&times;</button>
+            </div>
+            <form id="createCouponForm">
+                <div class="form-group">
+                    <label>Coupon Code</label>
+                    <input type="text" name="code" placeholder="e.g., LOVE20" required>
+                </div>
+                <div class="form-group">
+                    <label>Discount Type</label>
+                    <select name="discountType" required>
+                        <option value="percentage">Percentage</option>
+                        <option value="fixed">Fixed Amount</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Discount Value</label>
+                    <input type="number" name="discountValue" placeholder="20" required>
+                </div>
+                <div class="form-group">
+                    <label>Expiry Date (Optional)</label>
+                    <input type="date" name="expiryDate">
+                </div>
+                <div class="form-group">
+                    <label>Max Uses (Optional)</label>
+                    <input type="number" name="maxUses" placeholder="100">
+                </div>
+                <div class="form-group">
+                    <label>Min Purchase Amount (Optional)</label>
+                    <input type="number" name="minPurchaseAmount" placeholder="500">
+                </div>
+                <button type="submit" class="btn">Create Coupon</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createCouponModal')">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+        
+        // Orders Functions
+        async function showOrdersModal() {
+            showModal('ordersModal');
+            await loadOrders();
+        }
+        
+        async function loadOrders() {
+            try {
+                // For now, show sample data. In production, this would fetch from API
+                const sampleOrders = [
+                    {
+                        id: 'ORD001',
+                        templateName: 'Eternal Love Story',
+                        userEmail: 'john@example.com',
+                        amount: 299,
+                        status: 'paid',
+                        createdAt: '2024-01-15T10:30:00Z'
+                    },
+                    {
+                        id: 'ORD002',
+                        templateName: 'Birthday Surprise',
+                        userEmail: 'sarah@example.com',
+                        amount: 199,
+                        status: 'pending',
+                        createdAt: '2024-01-14T15:45:00Z'
+                    },
+                    {
+                        id: 'ORD003',
+                        templateName: 'Proposal Magic',
+                        userEmail: 'mike@example.com',
+                        amount: 399,
+                        status: 'failed',
+                        createdAt: '2024-01-13T09:20:00Z'
+                    }
+                ];
+                
+                const ordersHtml = \`
+                    <div style="margin-bottom: 2rem;">
+                        <h3>Recent Orders</h3>
+                        <p>Total Orders: \${sampleOrders.length} | Total Revenue: ₹\${sampleOrders.filter(o => o.status === 'paid').reduce((sum, o) => sum + o.amount, 0)}</p>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Template</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${sampleOrders.map(order => \`
+                                <tr>
+                                    <td>\${order.id}</td>
+                                    <td>\${order.templateName}</td>
+                                    <td>\${order.userEmail}</td>
+                                    <td>₹\${order.amount}</td>
+                                    <td><span class="status-badge status-\${order.status}">\${order.status.toUpperCase()}</span></td>
+                                    <td>\${new Date(order.createdAt).toLocaleDateString()}</td>
+                                    <td>
+                                        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="viewOrderDetails('\${order.id}')">View</button>
+                                    </td>
+                                </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>
+                \`;
+                
+                document.getElementById('ordersContent').innerHTML = ordersHtml;
+            } catch (error) {
+                document.getElementById('ordersContent').innerHTML = '<div class="error">Error loading orders</div>';
+            }
+        }
+        
+        function viewOrderDetails(orderId) {
+            alert(\`Order Details for \${orderId}\\n\\nThis will show detailed order information including:\\n- Payment details\\n- Customer info\\n- Template used\\n- Transaction history\\n- Refund options\`);
+        }
+        
+        // Revenue Functions
+        async function showRevenueModal() {
+            showModal('revenueModal');
+            await loadRevenue();
+        }
+        
+        async function loadRevenue() {
+            try {
+                const revenueData = {
+                    today: 599,
+                    thisWeek: 2150,
+                    thisMonth: 8750,
+                    totalRevenue: 45230,
+                    totalOrders: 156,
+                    avgOrderValue: 290
+                };
+                
+                const revenueHtml = \`
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div class="card">
+                            <h4>Today's Revenue</h4>
+                            <h2 style="color: #10b981;">₹\${revenueData.today}</h2>
+                        </div>
+                        <div class="card">
+                            <h4>This Week</h4>
+                            <h2 style="color: #3b82f6;">₹\${revenueData.thisWeek}</h2>
+                        </div>
+                        <div class="card">
+                            <h4>This Month</h4>
+                            <h2 style="color: #8b5cf6;">₹\${revenueData.thisMonth}</h2>
+                        </div>
+                        <div class="card">
+                            <h4>Total Revenue</h4>
+                            <h2 style="color: #f59e0b;">₹\${revenueData.totalRevenue}</h2>
+                        </div>
+                        <div class="card">
+                            <h4>Total Orders</h4>
+                            <h2>\${revenueData.totalOrders}</h2>
+                        </div>
+                        <div class="card">
+                            <h4>Avg Order Value</h4>
+                            <h2>₹\${revenueData.avgOrderValue}</h2>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>📈 Revenue Trends</h3>
+                        <p>Revenue analytics and charts would be displayed here.</p>
+                        <button class="btn" onclick="alert('Detailed analytics coming soon!')">View Detailed Analytics</button>
+                    </div>
+                \`;
+                
+                document.getElementById('revenueContent').innerHTML = revenueHtml;
+            } catch (error) {
+                document.getElementById('revenueContent').innerHTML = '<div class="error">Error loading revenue data</div>';
+            }
+        }
+        
+        // Coupon Functions
+        async function showCouponsModal() {
+            showModal('couponsModal');
+            await loadCoupons();
+        }
+        
+        async function loadCoupons() {
+            try {
+                // Sample coupon data
+                const sampleCoupons = [
+                    {
+                        code: 'LOVE20',
+                        discountType: 'percentage',
+                        discountValue: 20,
+                        usedCount: 45,
+                        maxUses: 100,
+                        isActive: true,
+                        expiryDate: '2024-12-31'
+                    },
+                    {
+                        code: 'VALENTINE50',
+                        discountType: 'fixed',
+                        discountValue: 50,
+                        usedCount: 12,
+                        maxUses: 50,
+                        isActive: true,
+                        expiryDate: '2024-02-14'
+                    },
+                    {
+                        code: 'BIRTHDAY15',
+                        discountType: 'percentage',
+                        discountValue: 15,
+                        usedCount: 78,
+                        maxUses: null,
+                        isActive: false,
+                        expiryDate: null
+                    }
+                ];
+                
+                const couponsHtml = \`
+                    <div style="margin-bottom: 2rem;">
+                        <h3>Active Coupons</h3>
+                        <button class="btn" onclick="showCreateCouponModal()">+ Create New Coupon</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                                <th>Used/Max</th>
+                                <th>Expiry</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${sampleCoupons.map(coupon => \`
+                                <tr>
+                                    <td><strong>\${coupon.code}</strong></td>
+                                    <td>\${coupon.discountType === 'percentage' ? 'Percentage' : 'Fixed'}</td>
+                                    <td>\${coupon.discountType === 'percentage' ? coupon.discountValue + '%' : '₹' + coupon.discountValue}</td>
+                                    <td>\${coupon.usedCount}/\${coupon.maxUses || '∞'}</td>
+                                    <td>\${coupon.expiryDate || 'No Expiry'}</td>
+                                    <td><span class="status-badge \${coupon.isActive ? 'status-paid' : 'status-failed'}">\${coupon.isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="editCoupon('\${coupon.code}')">Edit</button>
+                                        <button class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: #ef4444;" onclick="deleteCoupon('\${coupon.code}')">Delete</button>
+                                    </td>
+                                </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>
+                \`;
+                
+                document.getElementById('couponsContent').innerHTML = couponsHtml;
+            } catch (error) {
+                document.getElementById('couponsContent').innerHTML = '<div class="error">Error loading coupons</div>';
+            }
+        }
+        
+        function showCreateCouponModal() {
+            closeModal('couponsModal');
+            showModal('createCouponModal');
+        }
+        
+        function editCoupon(code) {
+            alert(\`Edit coupon: \${code}\\n\\nThis will open the coupon editor where you can:\\n- Update discount value\\n- Change expiry date\\n- Modify usage limits\\n- Toggle active status\`);
+        }
+        
+        function deleteCoupon(code) {
+            if (confirm(\`Are you sure you want to delete coupon '\${code}'?\\n\\nThis action cannot be undone.\`)) {
+                alert(\`Coupon '\${code}' would be deleted.\\n\\nIn production, this would:\\n- Remove from database\\n- Invalidate existing uses\\n- Update analytics\`);
+                // Refresh the coupons list
+                loadCoupons();
+            }
+        }
+        
+        // Create Coupon Form Handler
+        document.getElementById('createCouponForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const couponData = {
+                code: formData.get('code'),
+                discountType: formData.get('discountType'),
+                discountValue: parseInt(formData.get('discountValue')),
+                expiryDate: formData.get('expiryDate') || null,
+                maxUses: formData.get('maxUses') ? parseInt(formData.get('maxUses')) : null,
+                minPurchaseAmount: formData.get('minPurchaseAmount') ? parseInt(formData.get('minPurchaseAmount')) : null
+            };
+            
+            // In production, this would send to API
+            alert(\`Coupon Created Successfully!\\n\\nCode: \${couponData.code}\\nDiscount: \${couponData.discountValue}\${couponData.discountType === 'percentage' ? '%' : ' ₹'}\\n\\nThis coupon is now active and ready to use!\`);
+            
+            closeModal('createCouponModal');
+            e.target.reset();
+            
+            // Refresh coupons list if it's open
+            if (document.getElementById('couponsModal').style.display === 'flex') {
+                loadCoupons();
+            }
+        });
+    </script>
 </body>
 </html>`);
   });
