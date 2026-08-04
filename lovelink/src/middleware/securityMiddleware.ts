@@ -44,6 +44,12 @@ const getConfiguredOrigins = (): string[] => {
     return process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
   }
 
+  // Production fallback - use app URL
+  if (process.env.NODE_ENV === 'production' && process.env.VITE_APP_URL) {
+    console.warn('⚠️ ALLOWED_ORIGINS not set - using VITE_APP_URL as fallback');
+    return [process.env.VITE_APP_URL];
+  }
+
   // Default development origins
   return [
     'http://localhost:5173',

@@ -72,6 +72,106 @@ async function startServer() {
   });
 
   // ============================================
+  // DEBUG ENDPOINT (Development & Production)
+  // ============================================
+
+  app.get('/api/debug', (req: Request, res: Response) => {
+    const isProduction = config.isProduction;
+    
+    // In production, only allow from specific origins
+    const clientOrigin = req.headers.origin || req.headers.referer || 'unknown';
+    
+    res.json({
+      status: 'ok',
+      message: 'LoveLink Debug Endpoint',
+      environment: config.env,
+      timestamp: new Date().toISOString(),
+      server: {
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        nodeVersion: process.version,
+      },
+      config: {
+        host: config.host,
+        port: config.port,
+        apiUrl: config.apiUrl,
+        appUrl: config.appUrl,
+        corsEnabled: true,
+        allowedOrigins: config.cors.allowedOrigins,
+        requestOrigin: clientOrigin,
+      },
+      features: {
+        razorpayEnabled: config.razorpay.enabled,
+        cloudinaryEnabled: config.cloudinary.enabled,
+        emailEnabled: !!config.email.smtpUser,
+      },
+      // Don't expose secrets in production
+      ...(isProduction ? {} : {
+        database: {
+          connected: process.env.DATABASE_URL ? 'configured' : 'not-configured',
+        },
+      }),
+    });
+  });
+
+  // ============================================
+  // TEST ENDPOINT (Verify API connectivity)
+  // ============================================
+
+  app.post('/api/test', (req: Request, res: Response) => {
+    const testId = `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    res.json({
+      status: 'ok',
+      testId,
+      message: 'API connectivity test successful',
+      receivedData: {
+        body: req.body || null,
+        query: req.query || null,
+      },
+      server: {
+        timestamp: new Date().toISOString(),
+        environment: config.env,
+        uptime: process.uptime(),
+      },
+    });
+  });
+
+  // ============================================
+  // REQUEST LOGGING MIDDLEWARE (Add before static files)
+  // ============================================
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const startTime = Date.now();
+    
+    // Store original send
+    const originalSend = res.send;
+    
+    // Override send to capture response status
+    res.send = function(data: any) {
+      const duration = Date.now() - startTime;
+      const logLevel = res.statusCode >= 400 ? 'error' : res.statusCode >= 300 ? 'warn' : 'info';
+      
+      // Only log non-health-check, non-debug requests to reduce noise
+      if (!req.path.includes('/api/health') && !req.path.includes('/api/debug')) {
+        const logMessage = `[${new Date().toISOString()}] ${logLevel.toUpperCase()} ${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`;
+        
+        if (logLevel === 'error') {
+          console.error(logMessage);
+        } else if (logLevel === 'warn') {
+          console.warn(logMessage);
+        } else if (process.env.NODE_ENV !== 'production') {
+          console.log(logMessage);
+        }
+      }
+      
+      return originalSend.call(this, data);
+    };
+    
+    next();
+  });
+
+  // ============================================
   // STATIC FILE SERVING (BEFORE API ROUTES)
   // ============================================
 

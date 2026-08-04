@@ -38,12 +38,29 @@ export const validateEnvironment = (): void => {
     }
   }
 
+  // In production, DATABASE_URL is critical
+  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+    console.error('❌ CRITICAL: DATABASE_URL not set in Render dashboard!');
+    console.error('   Steps to fix:');
+    console.error('   1. Go to https://dashboard.render.com');
+    console.error('   2. Select your service: lovelink');
+    console.error('   3. Click "Environment" tab');
+    console.error('   4. Find the PostgreSQL service URL from "Services > lovelink-db > Info"');
+    console.error('   5. Paste it as DATABASE_URL');
+    console.error('   6. Click "Save Changes"');
+    console.error('   7. Click "Manual Deploy" > "Deploy latest commit"');
+    process.exit(1);
+  }
+
   if (missingVars.length > 0) {
     console.error('❌ Missing required environment variables:');
     missingVars.forEach((varName) => {
       console.error(`   - ${varName}`);
     });
-    process.exit(1);
+    // Don't exit in production - let it continue with warnings
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 
   // Validate specific format requirements
