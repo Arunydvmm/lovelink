@@ -40,26 +40,30 @@ async function main() {
   }
   console.log('✅ Templates seeded');
 
-  // Seed coupons
-  console.log('🎟️  Seeding coupons...');
-  for (const coupon of INITIAL_COUPONS) {
-    await prisma.coupon.upsert({
-      where: { code: coupon.code },
-      update: {},
-      create: {
-        code: coupon.code,
-        discountType: coupon.discountType,
-        discountValue: coupon.discountValue,
-        expiryDate: coupon.expiryDate ? new Date(coupon.expiryDate) : null,
-        maxUses: coupon.maxUses,
-        usedCount: coupon.usedCount || 0,
-        minPurchaseAmount: coupon.minPurchaseAmount,
-        isActive: coupon.isActive ?? true,
-        applicableTemplates: coupon.applicableTemplates || ['ALL'],
-      },
-    });
+  // Seed coupons (skip if error - templates are more important)
+  try {
+    console.log('🎟️  Seeding coupons...');
+    for (const coupon of INITIAL_COUPONS) {
+      await prisma.coupon.upsert({
+        where: { code: coupon.code },
+        update: {},
+        create: {
+          code: coupon.code,
+          discountType: coupon.discountType.toUpperCase() as any, // Convert to uppercase
+          discountValue: coupon.discountValue,
+          expiryDate: coupon.expiryDate ? new Date(coupon.expiryDate) : null,
+          maxUses: coupon.maxUses,
+          usedCount: coupon.usedCount || 0,
+          minPurchaseAmount: coupon.minPurchaseAmount,
+          isActive: coupon.isActive ?? true,
+          applicableTemplates: coupon.applicableTemplates || ['ALL'],
+        },
+      });
+    }
+    console.log('✅ Coupons seeded');
+  } catch (error) {
+    console.warn('⚠️  Coupons skipped (non-critical):', error.message);
   }
-  console.log('✅ Coupons seeded');
 
   // Seed legal pages
   console.log('📄 Seeding legal pages...');
