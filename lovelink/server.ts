@@ -62,13 +62,34 @@ async function startServer() {
   // HEALTH CHECK
   // ============================================
 
-  app.get('/api/health', (req: Request, res: Response) => {
-    res.json({
-      status: 'ok',
-      time: new Date().toISOString(),
-      environment: config.env,
-      uptime: process.uptime(),
-    });
+  app.get('/api/health', async (req: Request, res: Response) => {
+    try {
+      // Try to query the database to verify connectivity
+      const prisma = (await import('./src/lib/db')).default;
+      const templateCount = await prisma.template.count();
+      
+      res.json({
+        status: 'ok',
+        time: new Date().toISOString(),
+        environment: config.env,
+        uptime: process.uptime(),
+        database: {
+          connected: true,
+          templateCount,
+        },
+      });
+    } catch (error: any) {
+      console.error('Health check failed:', error);
+      res.status(503).json({
+        status: 'error',
+        time: new Date().toISOString(),
+        environment: config.env,
+        database: {
+          connected: false,
+          error: error.message,
+        },
+      });
+    }
   });
 
   // ============================================
@@ -188,6 +209,21 @@ async function startServer() {
   // API ROUTES
   // ============================================
 
+  // Wrap route handlers to catch errors gracefully
+  const wrapRoute = (handler: any) => async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await handler(req, res, next);
+    } catch (error: any) {
+      console.error(`Error in ${req.path}:`, error);
+      if (!res.headersSent) {
+        res.status(500).json({
+          error: 'Internal server error',
+          message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        });
+      }
+    }
+  };
+
   app.use('/api/auth', authRoutes);
   app.use('/api/templates', templateRoutes);
   app.use('/api/stories', storyRoutes);
@@ -232,6 +268,19 @@ async function startServer() {
     console.log(`🔗 API URL: ${config.apiUrl}`);
     console.log(`🌐 App URL: ${config.appUrl}`);
 
+    // Verify database connection
+    try {
+      const prisma = (await import('./src/lib/db')).default;
+      if (prisma) {
+        const count = await prisma.template.count();
+        console.log(`✅ Database connected - ${count} templates available`);
+      }
+    } catch (error: any) {
+      console.error('❌ Database connection failed:', error.message);
+      console.error('   The app will not work without a database connection.');
+      console.error('   Make sure DATABASE_URL is set correctly in Render dashboard.');
+    }
+
     // Verify SMTP connection
     try {
       const { emailService } = await import('./src/lib/email/EmailService');
@@ -239,7 +288,7 @@ async function startServer() {
       if (smtpVerified) {
         console.log('📧 DNSExit SMTP connection verified');
       } else {
-        console.warn('⚠️ DNSExit SMTP connection failed - emails may not send');
+        console.warn('⚠️ DNSExit SMTP connection failed - emails may not send (non-blocking)');
       }
     } catch (error) {
       console.warn('⚠️ Email service verification error:', error);
