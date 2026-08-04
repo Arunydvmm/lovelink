@@ -34,10 +34,12 @@ export default defineConfig(() => {
       chunkSizeWarningLimit: 1000,
       sourcemap: false, // DISABLE sourcemaps (they can use eval)
       minify: false, // DISABLE minification (terser can use eval)
+      target: 'es2015', // Ensure compatibility
+      assetsDir: 'assets', // Ensure assets go to /assets/
       outDir: 'dist',
       emptyOutDir: false, // Don't delete server files
-      assetsDir: 'assets',
     },
+    base: '/', // Ensure correct base path for Render
     optimizeDeps: {
       include: [
         'react',

@@ -175,18 +175,65 @@
       function testReactApp() {
         updateDebug('🔄 Testing React app loading...');
         
-        try {
-          // Try to load React dynamically
-          import('/src/main.tsx').then(() => {
-            updateDebug('✅ React app loaded successfully!');
-            document.getElementById('root').style.display = 'block';
-            document.querySelector('.container').style.display = 'none';
-          }).catch(error => {
-            updateDebug('❌ React failed: ' + error.message + '<br>🎯 Static version is working perfectly!');
-          });
-        } catch(e) {
-          updateDebug('❌ Module import failed: ' + e.message + '<br>🎯 Static version working!');
-        }
+        // First, check what JS files are available
+        Promise.all([
+          fetch('/assets/index.js').then(r => r.ok ? 'index.js ✅' : 'index.js ❌'),
+          fetch('/assets/').then(r => r.text()).then(html => {
+            const matches = html.match(/index-[a-zA-Z0-9]+\.js/g) || [];
+            return matches.length > 0 ? `Found: ${matches[0]} ✅` : 'No JS files ❌';
+          }).catch(() => 'Asset dir check failed'),
+        ]).then(results => {
+          updateDebug('📁 Asset Check: ' + results.join(', '));
+          
+          // Try to load the main script
+          const script = document.createElement('script');
+          script.type = 'module';
+          
+          // Try multiple possible paths
+          const possiblePaths = [
+            '/assets/index.js',
+            '/src/main.tsx',
+            '/dist/assets/index.js'
+          ];
+          
+          let pathIndex = 0;
+          
+          function tryNextPath() {
+            if (pathIndex >= possiblePaths.length) {
+              updateDebug('❌ All React loading paths failed<br>🎯 Static version is perfect!');
+              return;
+            }
+            
+            script.src = possiblePaths[pathIndex];
+            updateDebug(`🔄 Trying path ${pathIndex + 1}/${possiblePaths.length}: ${script.src}`);
+            
+            script.onload = () => {
+              updateDebug(`✅ Success with: ${script.src}`);
+              setTimeout(() => {
+                const root = document.getElementById('root');
+                if (root && root.children.length > 0) {
+                  updateDebug('✅ React app rendered! Switching to React mode...');
+                  document.getElementById('root').style.display = 'block';
+                  document.querySelector('.container').style.display = 'none';
+                } else {
+                  updateDebug('⚠️ React loaded but did not render. Static mode active.');
+                }
+              }, 1000);
+            };
+            
+            script.onerror = () => {
+              pathIndex++;
+              tryNextPath();
+            };
+            
+            document.head.appendChild(script);
+          }
+          
+          tryNextPath();
+          
+        }).catch(error => {
+          updateDebug('❌ Asset check failed: ' + error.message + '<br>🎯 Static version working!');
+        });
       }
       
       // Auto-test React loading after 2 seconds
