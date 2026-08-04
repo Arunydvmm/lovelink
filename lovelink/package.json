@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && npx prisma generate && npx prisma migrate deploy && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --external:@prisma/client --external:.prisma --sourcemap --outfile=dist/server.cjs",
+    "build": "vite build && npx prisma generate && npx prisma migrate deploy && npx prisma db seed && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --external:@prisma/client --external:.prisma --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "postinstall": "prisma generate",
     "clean": "rm -rf dist server.cjs",
