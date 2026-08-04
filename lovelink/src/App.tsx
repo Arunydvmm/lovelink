@@ -1,6 +1,6 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * LoveLink - Premium Mobile-First React Application
+ * Modern, beautiful, and fully responsive love story platform
  */
 
 import React, { useState, useEffect } from 'react';

@@ -3,130 +3,724 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LoveLink - Create Beautiful Love Stories</title>
+    <title>LoveLink - Create Magical Digital Surprises ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --primary-pink: #ff6b9d;
+        --primary-purple: #a855f7;
+        --primary-lavender: #c084fc;
+        --primary-peach: #fb7185;
+        --primary-rose: #f43f5e;
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --text-white: #ffffff;
+        --text-light: rgba(255, 255, 255, 0.9);
+        --shadow-glow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 40%, #f5576c 60%, #4facfe 80%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color: var(--text-white);
         min-height: 100vh;
         overflow-x: hidden;
+        position: relative;
       }
-      .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-      .hero { text-align: center; padding: 4rem 0; }
-      .hero h1 { 
-        font-size: 3.5rem; 
-        font-weight: bold; 
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
-      .hero p { 
-        font-size: 1.3rem; 
-        margin-bottom: 2rem; 
-        opacity: 0.9; 
-        max-width: 600px; 
-        margin-left: auto; 
-        margin-right: auto; 
+      /* Floating Animation Elements */
+      .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
       }
-      .btn {
-        display: inline-block;
-        padding: 1rem 2rem;
-        background: #ff6b6b;
+
+      .heart {
+        position: absolute;
+        color: var(--primary-pink);
+        font-size: 1.5rem;
+        opacity: 0.6;
+        animation: floatUp 8s infinite linear;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.6;
+        }
+        90% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        animation: sparkleAnim 3s infinite ease-in-out;
+      }
+
+      @keyframes sparkleAnim {
+        0%, 100% { opacity: 0; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+      /* Navigation */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1rem 0;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-white);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-links {
+        display: none;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: var(--text-light);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--text-white);
+        transform: translateY(-2px);
+      }
+      .cta-nav {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
         color: white;
         text-decoration: none;
-        border-radius: 50px;
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin: 0.5rem;
+        font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        box-shadow: var(--shadow-glow);
+      }
+
+      .cta-nav:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+      }
+
+      /* Mobile Bottom Navigation */
+      .mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--glass-border);
+        padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-light);
+        text-decoration: none;
+        font-size: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-nav-item:hover,
+      .mobile-nav-item.active {
+        color: var(--primary-pink);
+        transform: translateY(-2px);
+      }
+
+      .mobile-nav-icon {
+        font-size: 1.25rem;
+      }
+      /* Main Content */
+      .main-content {
+        padding-top: 80px;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        padding: 4rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #fff 0%, #f8fafc 50%, #e2e8f0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      }
+
+      .hero-subtitle {
+        font-size: clamp(1.1rem, 4vw, 1.4rem);
+        color: var(--text-light);
+        margin-bottom: 3rem;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(255, 107, 157, 0.6);
+      }
+
+      .btn-secondary {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        color: var(--text-white);
+        border: 1px solid var(--glass-border);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      /* Stats Section */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        max-width: 600px;
+        margin: 0 auto 4rem;
+        padding: 0 1.5rem;
+      }
+
+      .stat {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        transition: all 0.3s ease;
+      }
+
+      .stat:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-glow);
+      }
+      .stat-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+
+      /* Live Preview Section */
+      .live-preview {
+        padding: 4rem 1.5rem;
+        text-align: center;
+      }
+
+      .section-title {
+        font-size: clamp(2rem, 6vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .phone-mockup {
+        max-width: 300px;
+        margin: 0 auto;
+        position: relative;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 2rem;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-glow);
+      }
+
+      .phone-screen {
+        width: 100%;
+        aspect-ratio: 9/16;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+      /* Template Showcase */
+      .templates {
+        padding: 4rem 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        margin: 2rem;
+        border-radius: 30px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .template-categories {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+
+      .category-chip {
+        padding: 0.5rem 1rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category-chip:hover,
+      .category-chip.active {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .template-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        overflow: hidden;
+        transition: all 0.3s ease;
         cursor: pointer;
       }
-      .btn:hover {
-        background: #ff5252;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+
+      .template-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-glow);
       }
+      .template-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        position: relative;
+      }
+
+      .template-premium {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 215, 0, 0.9);
+        color: #000;
+        padding: 0.25rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .template-content {
+        padding: 1.5rem;
+      }
+
+      .template-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-white);
+      }
+
+      .template-category {
+        font-size: 0.8rem;
+        color: var(--primary-pink);
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+
+      .template-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+
+      .template-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .btn-small {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        border-radius: 15px;
+      }
+      /* Features Section */
       .features {
+        padding: 4rem 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .features-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
-        margin: 4rem 0;
+        margin-top: 3rem;
       }
-      .feature {
-        background: rgba(255,255,255,0.1);
+
+      .feature-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        border: 1px solid var(--glass-border);
         padding: 2rem;
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
-      }
-      .feature h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-      .feature p { opacity: 0.9; line-height: 1.6; }
-      .stats { 
-        display: flex; 
-        justify-content: center; 
-        gap: 3rem; 
-        margin: 3rem 0; 
-        flex-wrap: wrap; 
-      }
-      .stat { text-align: center; }
-      .stat-number { 
-        font-size: 3rem; 
-        font-weight: bold; 
-        display: block; 
-        color: #ff6b6b; 
-      }
-      .stat-label { 
-        font-size: 1rem; 
-        opacity: 0.8; 
-        margin-top: 0.5rem; 
-      }
-      .footer {
         text-align: center;
-        padding: 2rem 0;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        margin-top: 4rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
       }
-      .csp-notice {
-        background: rgba(255, 193, 7, 0.2);
-        border: 2px solid #ffc107;
-        border-radius: 10px;
-        padding: 1.5rem;
-        margin: 2rem 0;
-        color: #fff3cd;
+
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-glow);
       }
-      .csp-notice h3 {
-        color: #ffc107;
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s;
+      }
+
+      .feature-card:hover::before {
+        left: 100%;
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .feature-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-white);
+      }
+
+      .feature-description {
+        color: var(--text-light);
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+      /* How It Works */
+      .how-it-works {
+        padding: 4rem 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        margin: 2rem;
+        border-radius: 30px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 3rem auto 0;
+        position: relative;
+      }
+
+      .step {
+        text-align: center;
+        position: relative;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+        box-shadow: var(--shadow-glow);
+      }
+
+      .step-title {
+        font-size: 1.2rem;
+        font-weight: 600;
         margin-bottom: 0.5rem;
+        color: var(--text-white);
       }
-      @media (max-width: 768px) {
-        .hero h1 { font-size: 2.5rem; }
-        .hero p { font-size: 1.1rem; }
-        .stats { gap: 2rem; }
-        .container { padding: 1rem; }
+
+      .step-description {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      /* Responsive Design */
+      @media (min-width: 768px) {
+        .nav-links {
+          display: flex;
+        }
+        
+        .mobile-nav {
+          display: none;
+        }
+        
+        .hero {
+          padding: 6rem 1.5rem;
+        }
+        
+        .main-content {
+          padding-bottom: 2rem;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .btn {
+          width: 100%;
+          max-width: 280px;
+        }
+        
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .steps {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="hero">
-        <h1>💝 LoveLink</h1>
-        <p>Create beautiful, interactive digital love stories in minutes. Perfect for proposals, anniversaries, birthdays, and special moments.</p>
-        
-        <div class="csp-notice">
-          <h3>🚀 LoveLink is Live!</h3>
-          <p><strong>Static Mode:</strong> Full website functionality available through pure HTML/CSS interface. No JavaScript required!</p>
-        </div>
-        
-        <div>
-          <a href="/api/health" class="btn">📊 System Status</a>
-          <a href="/emergency" class="btn">🎨 Create Story</a>
-          <a href="/admin" class="btn">⚙️ Admin Panel</a>
-        </div>
-      </div>
+    <!-- Floating Animation Elements -->
+    <div class="floating-hearts">
+      <div class="heart" style="left: 10%; animation-delay: 0s;">💖</div>
+      <div class="heart" style="left: 20%; animation-delay: 2s;">💝</div>
+      <div class="heart" style="left: 30%; animation-delay: 4s;">💕</div>
+      <div class="heart" style="left: 40%; animation-delay: 1s;">💗</div>
+      <div class="heart" style="left: 50%; animation-delay: 3s;">💓</div>
+      <div class="heart" style="left: 60%; animation-delay: 5s;">💖</div>
+      <div class="heart" style="left: 70%; animation-delay: 2.5s;">💝</div>
+      <div class="heart" style="left: 80%; animation-delay: 4.5s;">💕</div>
+      <div class="heart" style="left: 90%; animation-delay: 1.5s;">💗</div>
+      
+      <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0.5s;"></div>
+      <div class="sparkle" style="top: 30%; left: 75%; animation-delay: 1.2s;"></div>
+      <div class="sparkle" style="top: 50%; left: 25%; animation-delay: 2.8s;"></div>
+      <div class="sparkle" style="top: 70%; left: 85%; animation-delay: 0.8s;"></div>
+      <div class="sparkle" style="top: 40%; left: 65%; animation-delay: 2.2s;"></div>
+    </div>
 
-      <div class="stats">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/" class="logo">
+          💝 LoveLink
+        </a>
+        
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#templates">Templates</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        
+        <a href="#create" class="cta-nav">
+          ❤️ Create Surprise
+        </a>
+      </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section id="home" class="hero">
+        <div class="hero-content">
+          <h1>Create Magical Digital Surprise Pages for Someone Special ❤️</h1>
+          <p class="hero-subtitle">
+            Create beautiful love stories, birthday surprises, friendship pages, anniversary gifts, 
+            proposal websites, memory albums, and interactive digital cards—all in minutes.
+          </p>
+          
+          <div class="hero-buttons">
+            <a href="#create" class="btn btn-primary">
+              ❤️ Create My Surprise
+            </a>
+            <a href="#templates" class="btn btn-secondary">
+              🎁 Explore Templates
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats">
         <div class="stat">
           <span class="stat-number">12+</span>
           <div class="stat-label">Beautiful Templates</div>
@@ -139,42 +733,245 @@
           <span class="stat-number">100%</span>
           <div class="stat-label">Mobile Friendly</div>
         </div>
-      </div>
+      </section>
 
-      <div class="features">
-        <div class="feature">
-          <h3>🎭 Interactive Stories</h3>
-          <p>Create engaging love stories with scratch cards, gift boxes, photo galleries, and custom music that your partner will love.</p>
+      <!-- Live Preview Section -->
+      <section class="live-preview">
+        <h2 class="section-title">See It In Action</h2>
+        <p class="section-subtitle">
+          Interactive phone mockup showing your love story come to life
+        </p>
+        
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            📱 Live Preview Coming Soon
+          </div>
+        </div>
+      </section>
+      <!-- Template Showcase -->
+      <section id="templates" class="templates">
+        <h2 class="section-title">Choose Your Perfect Template</h2>
+        <p class="section-subtitle">
+          Professionally designed templates for every special moment
+        </p>
+        
+        <div class="template-categories">
+          <div class="category-chip active">💕 Romantic</div>
+          <div class="category-chip">🎂 Birthday</div>
+          <div class="category-chip">💍 Anniversary</div>
+          <div class="category-chip">👫 Friendship</div>
+          <div class="category-chip">💒 Proposal</div>
+          <div class="category-chip">👰 Wedding</div>
+          <div class="category-chip">👋 Farewell</div>
+          <div class="category-chip">🎓 Graduation</div>
         </div>
         
-        <div class="feature">
-          <h3>📱 Mobile Perfect</h3>
-          <p>Every story looks amazing on mobile. Your loved one can enjoy the surprise anywhere, anytime.</p>
+        <div class="template-grid">
+          <div class="template-card">
+            <div class="template-image">
+              💕
+              <div class="template-premium">✨ Premium</div>
+            </div>
+            <div class="template-content">
+              <h3 class="template-title">Eternal Love Story</h3>
+              <div class="template-category">Romantic</div>
+              <div class="template-stats">
+                <span>❤️ 2.4k</span>
+                <span>👁️ 12.8k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="template-card">
+            <div class="template-image">🎂</div>
+            <div class="template-content">
+              <h3 class="template-title">Birthday Surprise</h3>
+              <div class="template-category">Birthday</div>
+              <div class="template-stats">
+                <span>❤️ 1.8k</span>
+                <span>👁️ 9.2k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="template-card">
+            <div class="template-image">
+              💍
+              <div class="template-premium">✨ Premium</div>
+            </div>
+            <div class="template-content">
+              <h3 class="template-title">Proposal Magic</h3>
+              <div class="template-category">Proposal</div>
+              <div class="template-stats">
+                <span>❤️ 3.1k</span>
+                <span>👁️ 15.6k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+      <!-- Features Section -->
+      <section id="features" class="features">
+        <h2 class="section-title">Everything You Need to Create Magic</h2>
+        <p class="section-subtitle">
+          Powerful features designed to make your surprise unforgettable
+        </p>
         
-        <div class="feature">
-          <h3>⚡ Quick & Easy</h3>
-          <p>Choose a template, add your photos and messages, and get a shareable link in just 5 minutes.</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon">🎨</span>
+            <h3 class="feature-title">Drag & Drop Builder</h3>
+            <p class="feature-description">
+              Intuitive visual editor that makes creating beautiful pages as easy as drag and drop.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🎵</span>
+            <h3 class="feature-title">Music Support</h3>
+            <p class="feature-description">
+              Add your favorite songs to create the perfect romantic atmosphere for your surprise.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📸</span>
+            <h3 class="feature-title">Unlimited Photos</h3>
+            <p class="feature-description">
+              Upload unlimited photos to create stunning galleries and memory collections.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📱</span>
+            <h3 class="feature-title">QR Code Sharing</h3>
+            <p class="feature-description">
+              Generate QR codes for instant sharing. Perfect for surprise reveals and gifts.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🔒</span>
+            <h3 class="feature-title">Password Protection</h3>
+            <p class="feature-description">
+              Keep your surprise safe with optional password protection until the perfect moment.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🤖</span>
+            <h3 class="feature-title">AI Love Letters</h3>
+            <p class="feature-description">
+              AI-powered love letter and poem generator to help express your deepest feelings.
+            </p>
+          </div>
         </div>
+      </section>
+      <!-- How It Works -->
+      <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          Create your magical surprise in just 4 simple steps
+        </p>
         
-        <div class="feature">
-          <h3>🔒 CSP Compliant</h3>
-          <p>Our platform works perfectly with strict Content Security Policies. No eval(), no inline scripts, pure performance.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Choose Template</h3>
+            <p class="step-description">
+              Browse our collection of beautiful templates and pick the perfect one for your occasion.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Customize Everything</h3>
+            <p class="step-description">
+              Add your photos, messages, music, and personal touches using our drag-and-drop editor.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Share Your Link</h3>
+            <p class="step-description">
+              Get a beautiful shareable link or QR code that works perfectly on any device.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Surprise Someone ❤️</h3>
+            <p class="step-description">
+              Watch their face light up as they experience your personalized digital surprise.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="footer">
-        <p>&copy; 2024 LoveLink. Made with ❤️ for couples everywhere.</p>
-        <div style="margin-top: 1rem;">
-          <a href="/admin" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Admin Dashboard</a>
-          <a href="/api/health" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">API Status</a>
-          <a href="/emergency" style="color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 1rem;">Emergency Access</a>
+      <!-- Final CTA -->
+      <section class="hero" style="padding: 4rem 1.5rem;">
+        <div class="hero-content">
+          <h2 class="section-title">Ready to Make Someone Smile?</h2>
+          <p class="section-subtitle">
+            Join thousands of people who have created unforgettable moments with LoveLink
+          </p>
+          
+          <div class="hero-buttons">
+            <a href="#create" class="btn btn-primary">
+              ❤️ Create Surprise Now
+            </a>
+            <a href="#templates" class="btn btn-secondary">
+              🎨 Explore Templates
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+      <a href="#home" class="mobile-nav-item active">
+        <span class="mobile-nav-icon">🏠</span>
+        Home
+      </a>
+      <a href="#templates" class="mobile-nav-item">
+        <span class="mobile-nav-icon">🎨</span>
+        Templates
+      </a>
+      <a href="#features" class="mobile-nav-item">
+        <span class="mobile-nav-icon">✨</span>
+        Features
+      </a>
+      <a href="#pricing" class="mobile-nav-item">
+        <span class="mobile-nav-icon">💎</span>
+        Pricing
+      </a>
+      <a href="/admin" class="mobile-nav-item">
+        <span class="mobile-nav-icon">👤</span>
+        Admin
+      </a>
+    </nav>
 
-    <!-- NO JAVASCRIPT - CSP COMPLIANT -->
-    <!-- React app disabled due to Render.com CSP restrictions -->
+    <!-- React App Container (Hidden) -->
     <div id="root" style="display: none;"></div>
+
+    <!-- Status Links (Hidden but accessible) -->
+    <div style="display: none;">
+      <a href="/api/health">API Health</a>
+      <a href="/emergency">Emergency Access</a>
+      <a href="/test-csp-safe">CSP Test</a>
+    </div>
   </body>
 </html>
