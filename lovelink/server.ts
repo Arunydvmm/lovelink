@@ -72,6 +72,19 @@ async function startServer() {
   });
 
   // ============================================
+  // STATIC FILE SERVING (BEFORE API ROUTES)
+  // ============================================
+
+  if (config.isProduction) {
+    console.log('📁 Serving static files from dist...');
+    const distPath = path.join(process.cwd(), 'dist');
+    app.use(express.static(distPath, {
+      maxAge: '1d',
+      etag: false,
+    }));
+  }
+
+  // ============================================
   // API ROUTES
   // ============================================
 
@@ -86,7 +99,7 @@ async function startServer() {
   app.use('/api/email-logs', emailLogRoutes);
 
   // ============================================
-  // STATIC & VITE MIDDLEWARE
+  // VITE MIDDLEWARE (DEV) & SPA FALLBACK
   // ============================================
 
   if (!config.isProduction) {
@@ -97,11 +110,9 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    console.log('📁 Serving static files from dist...');
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
+    // SPA fallback - catch-all for Vue Router
     app.get('*', (req: Request, res: Response) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      res.sendFile(path.join(process.cwd(), 'dist/index.html'));
     });
   }
 
