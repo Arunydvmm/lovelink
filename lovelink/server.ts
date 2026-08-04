@@ -49,7 +49,7 @@ async function startServer() {
   // ============================================
 
   app.use(sanitizationMiddleware);
-  app.use(secureHeadersMiddleware);
+  // app.use(secureHeadersMiddleware); // TEMPORARILY DISABLED FOR PRODUCTION DEBUGGING
   app.use(securityMonitoringMiddleware);
 
   // ============================================

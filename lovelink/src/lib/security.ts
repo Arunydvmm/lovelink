@@ -163,25 +163,8 @@ export const validatePassword = (password: string): { valid: boolean; errors: st
 // ============================================
 
 export const getCSPHeaders = (): Record<string, string> => {
-  return {
-    'Content-Security-Policy': [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
-      "img-src 'self' data: https: blob:",
-      "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com",
-      "connect-src 'self' https: wss:",
-      "frame-ancestors 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-    ].join('; '),
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy':
-      'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
-  };
+  // COMPLETELY DISABLED FOR PRODUCTION DEBUGGING
+  return {};
 };
 
 // ============================================
@@ -189,13 +172,6 @@ export const getCSPHeaders = (): Record<string, string> => {
 // ============================================
 
 export const getSecureHeaders = (): Record<string, string> => {
-  return {
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy':
-      'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
-  };
+  // COMPLETELY DISABLED FOR PRODUCTION DEBUGGING
+  return {};
 };
