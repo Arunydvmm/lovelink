@@ -4,10 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LoveLink - Create Beautiful Love Stories</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loading {
+        text-align: center;
+        padding: 2rem;
+      }
+      .loading h1 {
+        font-size: 3rem;
+        margin: 0 0 1rem 0;
+      }
+      .loading p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+      #root {
+        width: 100%;
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading">
+        <h1>💝 LoveLink</h1>
+        <p>Loading your beautiful love stories...</p>
+        <p style="font-size: 0.9rem; margin-top: 2rem;">If this message persists, check the browser console (F12) for errors.</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+
 
