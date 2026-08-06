@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoveLink - Create Magical Digital Surprises ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary-pink: #ff6b9d;
+        --primary-purple: #a855f7;
+        --primary-lavender: #c084fc;
+        --primary-peach: #fb7185;
+        --primary-rose: #f43f5e;
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --text-white: #ffffff;
+        --text-light: rgba(255, 255, 255, 0.9);
+        --shadow-glow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 40%, #f5576c 60%, #4facfe 80%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color: var(--text-white);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      /* Floating Animation Elements */
+      .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .heart {
+        position: absolute;
+        color: var(--primary-pink);
+        font-size: 1.5rem;
+        opacity: 0.6;
+        animation: floatUp 8s infinite linear;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.6;
+        }
+        90% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        animation: sparkleAnim 3s infinite ease-in-out;
+      }
+
+      @keyframes sparkleAnim {
+        0%, 100% { opacity: 0; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+      /* Navigation */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1rem 0;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-white);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-links {
+        display: none;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: var(--text-light);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--text-white);
+        transform: translateY(-2px);
+      }
+      .cta-nav {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-glow);
+      }
+
+      .cta-nav:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+      }
+
+      /* Mobile Bottom Navigation */
+      .mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--glass-border);
+        padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-light);
+        text-decoration: none;
+        font-size: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-nav-item:hover,
+      .mobile-nav-item.active {
+        color: var(--primary-pink);
+        transform: translateY(-2px);
+      }
+
+      .mobile-nav-icon {
+        font-size: 1.25rem;
+      }
+      /* Main Content */
+      .main-content {
+        padding-top: 80px;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        padding: 4rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #fff 0%, #f8fafc 50%, #e2e8f0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      }
+
+      .hero-subtitle {
+        font-size: clamp(1.1rem, 4vw, 1.4rem);
+        color: var(--text-light);
+        margin-bottom: 3rem;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(255, 107, 157, 0.6);
+      }
+
+      .btn-secondary {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        color: var(--text-white);
+        border: 1px solid var(--glass-border);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      /* Stats Section */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        max-width: 600px;
+        margin: 0 auto 4rem;
+        padding: 0 1.5rem;
+      }
+
+      .stat {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        transition: all 0.3s ease;
+      }
+
+      .stat:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-glow);
+      }
+      .stat-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+
+      /* Live Preview Section */
+      .live-preview {
+        padding: 4rem 1.5rem;
+        text-align: center;
+      }
+
+      .section-title {
+        font-size: clamp(2rem, 6vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .phone-mockup {
+        max-width: 300px;
+        margin: 0 auto;
+        position: relative;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 2rem;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-glow);
+      }
+
+      .phone-screen {
+        width: 100%;
+        aspect-ratio: 9/16;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+      /* Template Showcase */
+      .templates {
+        padding: 4rem 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        margin: 2rem;
+        border-radius: 30px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .template-categories {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+
+      .category-chip {
+        padding: 0.5rem 1rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category-chip:hover,
+      .category-chip.active {
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .template-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .template-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-glow);
+      }
+      .template-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        position: relative;
+      }
+
+      .template-premium {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 215, 0, 0.9);
+        color: #000;
+        padding: 0.25rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .template-content {
+        padding: 1.5rem;
+      }
+
+      .template-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-white);
+      }
+
+      .template-category {
+        font-size: 0.8rem;
+        color: var(--primary-pink);
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+
+      .template-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+
+      .template-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .btn-small {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        border-radius: 15px;
+      }
+      /* Features Section */
+      .features {
+        padding: 4rem 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        border: 1px solid var(--glass-border);
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-glow);
+      }
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s;
+      }
+
+      .feature-card:hover::before {
+        left: 100%;
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .feature-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-white);
+      }
+
+      .feature-description {
+        color: var(--text-light);
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+      /* How It Works */
+      .how-it-works {
+        padding: 4rem 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        margin: 2rem;
+        border-radius: 30px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 3rem auto 0;
+        position: relative;
+      }
+
+      .step {
+        text-align: center;
+        position: relative;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+        box-shadow: var(--shadow-glow);
+      }
+
+      .step-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-white);
+      }
+
+      .step-description {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      /* Responsive Design */
+      @media (min-width: 768px) {
+        .nav-links {
+          display: flex;
+        }
+        
+        .mobile-nav {
+          display: none;
+        }
+        
+        .hero {
+          padding: 6rem 1.5rem;
+        }
+        
+        .main-content {
+          padding-bottom: 2rem;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .btn {
+          width: 100%;
+          max-width: 280px;
+        }
+        
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .steps {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating Animation Elements -->
+    <div class="floating-hearts">
+      <div class="heart" style="left: 10%; animation-delay: 0s;">💖</div>
+      <div class="heart" style="left: 20%; animation-delay: 2s;">💝</div>
+      <div class="heart" style="left: 30%; animation-delay: 4s;">💕</div>
+      <div class="heart" style="left: 40%; animation-delay: 1s;">💗</div>
+      <div class="heart" style="left: 50%; animation-delay: 3s;">💓</div>
+      <div class="heart" style="left: 60%; animation-delay: 5s;">💖</div>
+      <div class="heart" style="left: 70%; animation-delay: 2.5s;">💝</div>
+      <div class="heart" style="left: 80%; animation-delay: 4.5s;">💕</div>
+      <div class="heart" style="left: 90%; animation-delay: 1.5s;">💗</div>
+      
+      <div class="sparkle" style="top: 20%; left: 15%; animation-delay: 0.5s;"></div>
+      <div class="sparkle" style="top: 30%; left: 75%; animation-delay: 1.2s;"></div>
+      <div class="sparkle" style="top: 50%; left: 25%; animation-delay: 2.8s;"></div>
+      <div class="sparkle" style="top: 70%; left: 85%; animation-delay: 0.8s;"></div>
+      <div class="sparkle" style="top: 40%; left: 65%; animation-delay: 2.2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/" class="logo">
+          💝 LoveLink
+        </a>
+        
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#templates">Templates</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+          <a href="/login">Login</a>
+        </div>
+        
+        <a href="#create" class="cta-nav">
+          ❤️ Create Surprise
+        </a>
+      </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section id="home" class="hero">
+        <div class="hero-content">
+          <h1>Create Magical Digital Surprise Pages for Someone Special ❤️</h1>
+          <p class="hero-subtitle">
+            Create beautiful love stories, birthday surprises, friendship pages, anniversary gifts, 
+            proposal websites, memory albums, and interactive digital cards—all in minutes.
+          </p>
+          
+          <div class="hero-buttons">
+            <a href="#create" class="btn btn-primary">
+              ❤️ Create My Surprise
+            </a>
+            <a href="#templates" class="btn btn-secondary">
+              🎁 Explore Templates
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats">
+        <div class="stat">
+          <span class="stat-number">12+</span>
+          <div class="stat-label">Beautiful Templates</div>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5</span>
+          <div class="stat-label">Minutes to Create</div>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <div class="stat-label">Mobile Friendly</div>
+        </div>
+      </section>
+
+      <!-- Live Preview Section -->
+      <section class="live-preview">
+        <h2 class="section-title">See It In Action</h2>
+        <p class="section-subtitle">
+          Interactive phone mockup showing your love story come to life
+        </p>
+        
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            📱 Live Preview Coming Soon
+          </div>
+        </div>
+      </section>
+      <!-- Template Showcase -->
+      <section id="templates" class="templates">
+        <h2 class="section-title">Choose Your Perfect Template</h2>
+        <p class="section-subtitle">
+          Professionally designed templates for every special moment
+        </p>
+        
+        <div class="template-categories">
+          <div class="category-chip active">💕 Romantic</div>
+          <div class="category-chip">🎂 Birthday</div>
+          <div class="category-chip">💍 Anniversary</div>
+          <div class="category-chip">👫 Friendship</div>
+          <div class="category-chip">💒 Proposal</div>
+          <div class="category-chip">👰 Wedding</div>
+          <div class="category-chip">👋 Farewell</div>
+          <div class="category-chip">🎓 Graduation</div>
+        </div>
+        
+        <div class="template-grid">
+          <div class="template-card">
+            <div class="template-image">
+              💕
+              <div class="template-premium">✨ Premium</div>
+            </div>
+            <div class="template-content">
+              <h3 class="template-title">Eternal Love Story</h3>
+              <div class="template-category">Romantic</div>
+              <div class="template-stats">
+                <span>❤️ 2.4k</span>
+                <span>👁️ 12.8k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="template-card">
+            <div class="template-image">🎂</div>
+            <div class="template-content">
+              <h3 class="template-title">Birthday Surprise</h3>
+              <div class="template-category">Birthday</div>
+              <div class="template-stats">
+                <span>❤️ 1.8k</span>
+                <span>👁️ 9.2k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="template-card">
+            <div class="template-image">
+              💍
+              <div class="template-premium">✨ Premium</div>
+            </div>
+            <div class="template-content">
+              <h3 class="template-title">Proposal Magic</h3>
+              <div class="template-category">Proposal</div>
+              <div class="template-stats">
+                <span>❤️ 3.1k</span>
+                <span>👁️ 15.6k</span>
+              </div>
+              <div class="template-actions">
+                <a href="#preview" class="btn btn-secondary btn-small">Preview</a>
+                <a href="#use" class="btn btn-primary btn-small">Use Template</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Features Section -->
+      <section id="features" class="features">
+        <h2 class="section-title">Everything You Need to Create Magic</h2>
+        <p class="section-subtitle">
+          Powerful features designed to make your surprise unforgettable
+        </p>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon">🎨</span>
+            <h3 class="feature-title">Drag & Drop Builder</h3>
+            <p class="feature-description">
+              Intuitive visual editor that makes creating beautiful pages as easy as drag and drop.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🎵</span>
+            <h3 class="feature-title">Music Support</h3>
+            <p class="feature-description">
+              Add your favorite songs to create the perfect romantic atmosphere for your surprise.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📸</span>
+            <h3 class="feature-title">Unlimited Photos</h3>
+            <p class="feature-description">
+              Upload unlimited photos to create stunning galleries and memory collections.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">📱</span>
+            <h3 class="feature-title">QR Code Sharing</h3>
+            <p class="feature-description">
+              Generate QR codes for instant sharing. Perfect for surprise reveals and gifts.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🔒</span>
+            <h3 class="feature-title">Password Protection</h3>
+            <p class="feature-description">
+              Keep your surprise safe with optional password protection until the perfect moment.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <span class="feature-icon">🤖</span>
+            <h3 class="feature-title">AI Love Letters</h3>
+            <p class="feature-description">
+              AI-powered love letter and poem generator to help express your deepest feelings.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- How It Works -->
+      <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          Create your magical surprise in just 4 simple steps
+        </p>
+        
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Choose Template</h3>
+            <p class="step-description">
+              Browse our collection of beautiful templates and pick the perfect one for your occasion.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Customize Everything</h3>
+            <p class="step-description">
+              Add your photos, messages, music, and personal touches using our drag-and-drop editor.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Share Your Link</h3>
+            <p class="step-description">
+              Get a beautiful shareable link or QR code that works perfectly on any device.
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Surprise Someone ❤️</h3>
+            <p class="step-description">
+              Watch their face light up as they experience your personalized digital surprise.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing Section -->
+      <section id="pricing" class="templates">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <p class="section-subtitle">
+          Start free or upgrade for premium features and unlimited creations
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1000px; margin: 3rem auto 0;">
+          <!-- Free Plan -->
+          <div class="feature-card" style="border: 2px solid rgba(255,255,255,0.2);">
+            <h3 style="color: #10b981; margin-bottom: 0.5rem;">Free</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹0</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ 3 Basic Templates</li>
+              <li>✅ Up to 10 Photos</li>
+              <li>✅ Basic Customization</li>
+              <li>✅ Shareable Link</li>
+              <li>❌ Premium Templates</li>
+              <li>❌ Custom Music</li>
+              <li>❌ Password Protection</li>
+            </ul>
+            <a href="#create" class="btn btn-secondary" style="width: 100%;">Get Started Free</a>
+          </div>
+          
+          <!-- Premium Plan -->
+          <div class="feature-card" style="border: 3px solid #ff6b9d; position: relative;">
+            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff6b9d, #a855f7); padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">POPULAR</div>
+            <h3 style="color: #ff6b9d; margin-bottom: 0.5rem;">Premium</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹299</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ All Free Features</li>
+              <li>✅ 12+ Premium Templates</li>
+              <li>✅ Unlimited Photos & Videos</li>
+              <li>✅ Custom Music Upload</li>
+              <li>✅ Password Protection</li>
+              <li>✅ QR Code Generation</li>
+              <li>✅ Priority Support</li>
+            </ul>
+            <a href="#create" class="btn btn-primary" style="width: 100%;">Choose Premium</a>
+          </div>
+          
+          <!-- Creator Plan -->
+          <div class="feature-card" style="border: 2px solid rgba(255,255,255,0.2);">
+            <h3 style="color: #a855f7; margin-bottom: 0.5rem;">Creator</h3>
+            <div style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">₹499</div>
+            <ul style="text-align: left; margin-bottom: 2rem; line-height: 2;">
+              <li>✅ All Premium Features</li>
+              <li>✅ Custom Domain</li>
+              <li>✅ Advanced Analytics</li>
+              <li>✅ Bulk Creation</li>
+              <li>✅ API Access</li>
+              <li>✅ White Label Option</li>
+              <li>✅ 24/7 Support</li>
+            </ul>
+            <a href="#create" class="btn" style="width: 100%; background: linear-gradient(135deg, #a855f7, #8b5cf6);">Choose Creator</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="how-it-works">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+          Have questions or need help creating your perfect surprise?
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 800px; margin: 3rem auto 0;">
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📧</span>
+            <h3>Email Support</h3>
+            <p style="margin: 1rem 0;">Get help with your love stories</p>
+            <a href="mailto:support@lovelink.com" class="btn btn-secondary">support@lovelink.com</a>
+          </div>
+          
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">💬</span>
+            <h3>Live Chat</h3>
+            <p style="margin: 1rem 0;">Instant help when you need it</p>
+            <button class="btn btn-primary" onclick="alert('Live chat feature coming soon!')">Start Chat</button>
+          </div>
+          
+          <div class="feature-card">
+            <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📚</span>
+            <h3>Help Center</h3>
+            <p style="margin: 1rem 0;">Browse our guides and tutorials</p>
+            <button class="btn btn-secondary" onclick="alert('Help center coming soon!')">View Guides</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Final CTA -->
+      <section class="hero" style="padding: 4rem 1.5rem;">
+        <div class="hero-content">
+          <h2 class="section-title">Ready to Make Someone Smile?</h2>
+          <p class="section-subtitle">
+            Join thousands of people who have created unforgettable moments with LoveLink
+          </p>
+          
+          <div class="hero-buttons">
+            <a href="#create" class="btn btn-primary">
+              ❤️ Create Surprise Now
+            </a>
+            <a href="#templates" class="btn btn-secondary">
+              🎨 Explore Templates
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+      <a href="#home" class="mobile-nav-item active">
+        <span class="mobile-nav-icon">🏠</span>
+        Home
+      </a>
+      <a href="#templates" class="mobile-nav-item">
+        <span class="mobile-nav-icon">🎨</span>
+        Templates
+      </a>
+      <a href="#features" class="mobile-nav-item">
+        <span class="mobile-nav-icon">✨</span>
+        Features
+      </a>
+      <a href="#pricing" class="mobile-nav-item">
+        <span class="mobile-nav-icon">💎</span>
+        Pricing
+      </a>
+      <a href="#contact" class="mobile-nav-item">
+        <span class="mobile-nav-icon">💝</span>
+        Contact
+      </a>
+    </nav>
+
+    <!-- React App Container (Hidden initially, shown when React loads) -->
+    <div id="root" style="display: none;"></div>
+
+    <!-- Status Links (Hidden but accessible via direct URL) -->
+    <div style="display: none;">
+      <a href="/api/health">API Health</a>
+      <a href="/emergency">Emergency Access</a>
+      <a href="/test-csp-safe">CSP Test</a>
+    </div>
+
+    <!-- Enable React App Loading -->
+    <script>
+      // Simple function to show React app when it loads
+      function showReactApp() {
+        const root = document.getElementById('root');
+        const mainContent = document.querySelector('.main-content');
+        
+        if (root && root.children.length > 0) {
+          // React app has loaded, show it
+          root.style.display = 'block';
+          if (mainContent) mainContent.style.display = 'none';
+          document.querySelector('.navbar').style.display = 'none';
+          document.querySelector('.mobile-nav').style.display = 'none';
+        }
+      }
+      
+      // Check for React app every 1 second for 10 seconds
+      let checkCount = 0;
+      const checkInterval = setInterval(() => {
+        checkCount++;
+        showReactApp();
+        
+        if (checkCount >= 10) {
+          clearInterval(checkInterval);
+        }
+      }, 1000);
+      
+      // Make CTA buttons functional
+      document.addEventListener('DOMContentLoaded', function() {
+        // Create button click handlers
+        const createButtons = document.querySelectorAll('[href="#create"]');
+        const templateButtons = document.querySelectorAll('[href="#templates"]');
+        
+        createButtons.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Try to load React app first, then redirect if needed
+            setTimeout(() => {
+              if (document.getElementById('root').children.length === 0) {
+                // React not loaded, redirect to admin for now
+                window.location.href = '/admin';
+              }
+            }, 500);
+          });
+        });
+        
+        templateButtons.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Scroll to templates section for now
+            document.getElementById('templates').scrollIntoView({behavior: 'smooth'});
+          });
+        });
+        
+        // Make mobile nav functional
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        mobileNavItems.forEach(item => {
+          item.addEventListener('click', function(e) {
+            // Remove active class from all
+            mobileNavItems.forEach(nav => nav.classList.remove('active'));
+            // Add active class to clicked item
+            this.classList.add('active');
+            
+            // Handle special routes
+            if (this.href.includes('/login')) {
+              // Let it navigate normally to login
+              return;
+            }
+            
+            // Handle anchor links
+            if (this.href.includes('#')) {
+              e.preventDefault();
+              const target = this.href.split('#')[1];
+              const element = document.getElementById(target);
+              if (element) {
+                element.scrollIntoView({behavior: 'smooth'});
+              }
+            }
+          });
+        });
+      });
+    </script>
+
+    <!-- Load React App -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>>

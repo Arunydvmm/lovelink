@@ -1,0 +1,6 @@
+{
+  "name": "LoveLink",
+  "description": "LoveLink is a premium Digital Surprise Builder where users create beautiful interactive surprise pages for romantic occasions, birthdays, proposals, anniversaries, and festivals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
